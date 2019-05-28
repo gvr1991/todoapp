@@ -23,6 +23,11 @@ class TodoApp extends React.Component {
 
   handleProjectCreate = (params, event) => {
     if (event.key === 'Enter') {
+      const title = event.target.value;
+      if (title === "") {
+        return;
+      }
+
       const projects = this.state.projects;
       const project = {
         id: UUID.v4(),
@@ -41,6 +46,11 @@ class TodoApp extends React.Component {
 
   handleListCreate = (params, event) => {
     if (event.key === 'Enter') {
+      const title = event.target.value;
+      if (title === "") {
+        return;
+      }
+
       const lists = this.state.lists;
       const list = {
         id: UUID.v4(),
@@ -60,6 +70,11 @@ class TodoApp extends React.Component {
 
   handleTaskCreate = (params, event) => {
     if (event.key === 'Enter') {
+      const title = event.target.value;
+      if (title === "") {
+        return;
+      }
+
       const tasks = this.state.tasks;
       const task = {
         id: UUID.v4(),

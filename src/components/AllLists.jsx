@@ -8,7 +8,6 @@ class AllLists extends React.Component {
     const { projects, match, refNewList, onListCreate } = this.props;
     const projectId = match.params['projectId'];
     const project = projects.find(project => project.id === projectId);
-    console.log(project);
     let lists = this.props.lists ? this.props.lists.filter(list => list.projectId === projectId) : [];
 
     lists = lists.length > 0 ? (lists.map( (list) =>
