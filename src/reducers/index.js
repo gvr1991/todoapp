@@ -17,7 +17,12 @@ function rootReducer(state = initialState, action) {
       break;
 
     case ACTION_TYPES.DELETE_PROJECT:
-      break;
+      const projects = state.projects;
+      projects.delete(action.payload);
+
+      return Object.assign({}, state, {
+        projects: projects,
+      });
 
     case ACTION_TYPES.CREATE_LIST:
       return Object.assign({}, state, {

@@ -1,43 +1,58 @@
 import React from 'react';
+import { default as UUID } from 'uuid';
 import { withRouter } from "react-router";
+import { connect } from "react-redux";
+import { createTask, deleteTask } from '../actions/index';
 import TodoListContent from './TodoListContent';
 
-class AllTasks extends React.Component {
+const mapStateToProps = (state) => {
+  return {
+    lists: state.lists,
+    tasks: state.tasks,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    sendCreate: (task) => dispatch(createTask(task)),
+    sendDelete: (task) => dispatch(deleteTask(task)),
+  }
+}
+
+class ConnectedTasks extends React.Component {
+  handleTaskCreate = (params, title) => {
+    if (title === "") {
+      return;
+    }
+
+    this.props.sendCreate({
+      id: UUID.v4(),
+      title,
+      listId: params['listId'],
+      projectId: params['projectId'],
+    });
+  }
+
   render() {
-    const { match, tasks, lists, onTaskCreate } = this.props;
+    const { match, lists, tasks } = this.props;
     const listId = match.params['listId'];
     let tasksInList = tasks ? tasks.filter(task => task.listId === listId) : [];
     let list = lists.find(list => list.id === listId);
 
     tasksInList = tasksInList.length > 0 ? (tasksInList.map( (task) =>
     <div key={task.id}>
-      <div
-        id="toggle-completion"
-        name="toggle-completion"
-      />
-
       <input
         id="enter-task-title"
         name="title"
         type="text"
         value={task.title}
       />
-
-      <div
-        id="toggle-editable"
-        name="toggle-editable"
-      />
-
-      <div
-        id="delete-item"
-        name="delete-item"
-      />
     </div>
     )) : null;
 
     return <TodoListContent
       header={list.title}
-      onEnter={onTaskCreate}
+      onEnter={this.handleTaskCreate}
       placeholder="Create tasks as a todo-list"
       listItems={tasksInList}
       urlParams={match.params}
@@ -45,4 +60,5 @@ class AllTasks extends React.Component {
   }
 }
 
+const AllTasks = connect(mapStateToProps, mapDispatchToProps)(ConnectedTasks);
 export default withRouter(AllTasks);

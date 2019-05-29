@@ -6,17 +6,6 @@ import AllLists from './AllLists';
 import AllTasks from './AllTasks';
 
 class TodoApp extends React.Component {
-  constructor(props) {
-    super(props);
-    const { projects, lists, tasks } = this.props;
-
-    this.state = {
-      projects: (projects || []),
-      lists: (lists || []),
-      tasks: (tasks || []),
-    };
-  }
-
   handleProjectCreate = (params, title) => {
     if (title === "") {
       return;
@@ -77,34 +66,15 @@ class TodoApp extends React.Component {
         <div>
           <Route
             path="/projects"
-            component={() => 
-              <AllProjects
-                projects={this.state.projects}
-                onProjectCreate={this.handleProjectCreate}
-              />
-            }
+            component={ () => <AllProjects /> }
           />
-
           <Route
             path="/project/:projectId/lists"
-            component={() =>
-              <AllLists
-                lists={this.state.lists}
-                projects={this.state.projects}
-                onListCreate={this.handleListCreate}
-              />
-            }
+            component={ () => <AllLists /> }
           />
-
           <Route
             path="/project/:projectId/list/:listId/tasks"
-            component={() =>
-              <AllTasks
-                lists={this.state.lists}
-                tasks={this.state.tasks}
-                onTaskCreate={this.handleTaskCreate}
-              />
-            }
+            component={ () => <AllTasks /> }
           />
         </div>
       </Router>
