@@ -1,15 +1,15 @@
 import React from 'react';
 import { withRouter } from "react-router";
-import TodoListContent from './TodoListContent'
+import TodoListContent from './TodoListContent';
 
 class AllTasks extends React.Component {
   render() {
-    const { lists, match, refNewTask, onTaskCreate } = this.props;
+    const { match, tasks, lists, onTaskCreate } = this.props;
     const listId = match.params['listId'];
-    let tasks = this.props.tasks ? this.props.tasks.filter(task => task.listId === listId) : [];
+    let tasksInList = tasks ? tasks.filter(task => task.listId === listId) : [];
     let list = lists.find(list => list.id === listId);
 
-    tasks = tasks.length > 0 ? (tasks.map( (task) =>
+    tasksInList = tasksInList.length > 0 ? (tasksInList.map( (task) =>
       <li key={task.id}>
         {task.title}
       </li>
@@ -17,10 +17,9 @@ class AllTasks extends React.Component {
 
     return <TodoListContent
       header={list.title}
-      reference={refNewTask}
-      onKeyPressCallback={onTaskCreate}
+      onEnter={onTaskCreate}
       placeholder="Create tasks as a todo-list"
-      listItems={tasks}
+      listItems={tasksInList}
       urlParams={match.params}
     />;
   }

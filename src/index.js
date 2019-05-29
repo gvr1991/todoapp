@@ -13,19 +13,19 @@ const LIST_IDS = [UUID.v4(), UUID.v4(), UUID.v4(), UUID.v4()];
 const PROJECTS = [
   {
     id: PROJECT_IDS[0],
-    title: "Project 1",
+    title: "Project " + PROJECT_IDS[0],
   },
   {
     id: PROJECT_IDS[1],
-    title: "Project 2",
+    title: "Project " + PROJECT_IDS[1],
   },
   {
     id: PROJECT_IDS[2],
-    title: "Project 3",
+    title: "Project " + PROJECT_IDS[2],
   },
   {
     id: PROJECT_IDS[3],
-    title: "Project 4",
+    title: "Project " + PROJECT_IDS[3],
   }
 ];
 
@@ -33,22 +33,22 @@ const LISTS = [
   {
     id: LIST_IDS[0],
     projectId: PROJECT_IDS[0],
-    title: "List 1",
+    title: "List [" + PROJECT_IDS[0] + "]",
   },
   {
     id: LIST_IDS[1],
     projectId: PROJECT_IDS[1],
-    title: "List 2",
+    title: "List [" + PROJECT_IDS[1] + "]",
   },
   {
     id: LIST_IDS[2],
     projectId: PROJECT_IDS[2],
-    title: "List 3",
+    title: "List [" + PROJECT_IDS[2] + "]",
   },
   {
     id: LIST_IDS[3],
     projectId: PROJECT_IDS[3],
-    title: "List 4",
+    title: "List [" + PROJECT_IDS[3] + "]",
   }
 ];
 
@@ -57,25 +57,25 @@ const TASKS = [
     id: UUID.v4(),
     listId: LIST_IDS[0],
     projectId: PROJECT_IDS[0],
-    title: "Task 1",
+    title: "Task [" + PROJECT_IDS[0] + "] -> [" + LIST_IDS[0],
   },
   {
     id: UUID.v4(),
     listId: LIST_IDS[1],
     projectId: PROJECT_IDS[1],
-    title: "Task 2",
+    title: "Task [" + PROJECT_IDS[1] + "] -> [" + LIST_IDS[1],
   },
   {
     id: UUID.v4(),
     listId: LIST_IDS[2],
     projectId: PROJECT_IDS[2],
-    title: "Task 3",
+    title: "Task [" + PROJECT_IDS[2] + "] -> [" + LIST_IDS[2],
   },
   {
     id: UUID.v4(),
     listId: LIST_IDS[3],
     projectId: PROJECT_IDS[3],
-    title: "Task 4",
+    title: "Task [" + PROJECT_IDS[3] + "] -> [" + LIST_IDS[3],
   }
 ];
 

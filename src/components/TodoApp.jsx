@@ -15,90 +15,63 @@ class TodoApp extends React.Component {
       lists: (lists || []),
       tasks: (tasks || []),
     };
-
-    this.refNewProject = React.createRef();
-    this.refNewList = React.createRef();
-    this.refNewTask = React.createRef();
   }
 
-  handleProjectCreate = (params, event) => {
-    if (event.key === 'Enter') {
-      const title = event.target.value;
-      if (title === "") {
-        return;
-      }
-
-      const projects = this.state.projects;
-      const project = {
-        id: UUID.v4(),
-        title: event.target.value,
-      };
-      projects.push(project);
-
-      this.setState({
-        projects: projects,
-      });
-
-      this.refNewProject.current.value = "";
-      event.preventDefault();
+  handleProjectCreate = (params, title) => {
+    if (title === "") {
+      return;
     }
+
+    const projects = this.state.projects;
+    const project = {
+      id: UUID.v4(),
+      title,
+    };
+    projects.push(project);
+
+    this.setState({
+      projects: projects,
+    });
   }
 
-  handleListCreate = (params, event) => {
-    if (event.key === 'Enter') {
-      const title = event.target.value;
-      if (title === "") {
-        return;
-      }
-
-      const lists = this.state.lists;
-      const list = {
-        id: UUID.v4(),
-        title: event.target.value,
-        projectId: params['projectId'],
-      };
-      lists.push(list);
-
-      this.setState({
-        lists: lists,
-      });
-
-      this.refNewList.current.value = "";
-      event.preventDefault();
+  handleListCreate = (params, title) => {
+    if (title === "") {
+      return;
     }
+
+    const lists = this.state.lists;
+    const list = {
+      id: UUID.v4(),
+      title,
+      projectId: params['projectId'],
+    };
+    lists.push(list);
+
+    this.setState({
+      lists: lists,
+    });
   }
 
-  handleTaskCreate = (params, event) => {
-    if (event.key === 'Enter') {
-      const title = event.target.value;
-      if (title === "") {
-        return;
-      }
-
-      const tasks = this.state.tasks;
-      const task = {
-        id: UUID.v4(),
-        title: event.target.value,
-        listId: params['listId'],
-        projectId: params['projectId'],
-      };
-      tasks.push(task);
-
-      this.setState({
-        tasks: tasks,
-      });
-
-      this.refNewTask.current.value = "";
-      event.preventDefault();
+  handleTaskCreate = (params, title) => {
+    if (title === "") {
+      return;
     }
+
+    const tasks = this.state.tasks;
+    const task = {
+      id: UUID.v4(),
+      title,
+      listId: params['listId'],
+      projectId: params['projectId'],
+    };
+    tasks.push(task);
+
+    this.setState({
+      tasks: tasks,
+    });
   }
 
   render() {
-    let { tasks, lists, projects } = this.props;
-    tasks = tasks || [];
-    lists = lists || [];
-    projects = projects || [];
-
     return (
       <Router>
         <div>
@@ -106,9 +79,8 @@ class TodoApp extends React.Component {
             path="/projects"
             component={() => 
               <AllProjects
-                projects={projects}
+                projects={this.state.projects}
                 onProjectCreate={this.handleProjectCreate}
-                refNewProject={this.refNewProject}
               />
             }
           />
@@ -117,10 +89,9 @@ class TodoApp extends React.Component {
             path="/project/:projectId/lists"
             component={() =>
               <AllLists
-                projects={projects}
-                lists={lists}
+                lists={this.state.lists}
+                projects={this.state.projects}
                 onListCreate={this.handleListCreate}
-                refNewList={this.refNewList}
               />
             }
           />
@@ -129,10 +100,9 @@ class TodoApp extends React.Component {
             path="/project/:projectId/list/:listId/tasks"
             component={() =>
               <AllTasks
-                lists={lists}
-                tasks={tasks}
+                lists={this.state.lists}
+                tasks={this.state.tasks}
                 onTaskCreate={this.handleTaskCreate}
-                refNewTask={this.refNewTask}
               />
             }
           />

@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 import { withRouter } from "react-router";
-import TodoListContent from './TodoListContent'
+import TodoListContent from './TodoListContent';
 
 class AllProjects extends React.Component {
   render() {
-    const { match, refNewProject, onProjectCreate } = this.props;
-    const projects = this.props.projects ? (this.props.projects.map( (project) =>
+    const { match, projects, onProjectCreate } = this.props;
+
+    const allProjects = projects ? (projects.map( (project) =>
       <li key={project.id}>
         <Link to={`/project/${project.id}/lists`}>
           {project.title}
@@ -16,10 +17,9 @@ class AllProjects extends React.Component {
 
     return <TodoListContent
       header="All Projects"
-      reference={refNewProject}
-      onKeyPressCallback={onProjectCreate}
+      onEnter={onProjectCreate}
       placeholder="Create projects as a todo-list"
-      listItems={projects}
+      listItems={allProjects}
       urlParams={match.params}
     />;
   }

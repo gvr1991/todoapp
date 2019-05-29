@@ -64,9 +64,9 @@ body {
   width: 97%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-size: 20px;
+  font-size: 16px;
   font-family: inherit;
-  line-height: 2em;
+  line-height: 2.4em;
   border: 0;
   outline: none;
   padding: 6px;
@@ -79,9 +79,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 97%;
-  font-size: 18px;
+  font-size: 16px;
   font-family: inherit;
-  line-height: 2em;
+  line-height: 2.4em;
   border: 0;
   outline: none;
   padding: 6px;
