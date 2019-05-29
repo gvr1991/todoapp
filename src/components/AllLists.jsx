@@ -5,7 +5,6 @@ import TodoListContent from './TodoListContent';
 
 class AllLists extends React.Component {
   render() {
-    console.log(this.props);
     const { match, lists, projects, onListCreate } = this.props;
     const projectId = match.params['projectId'];
     const project = projects.find(project => project.id === projectId);

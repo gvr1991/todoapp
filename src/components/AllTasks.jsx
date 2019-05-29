@@ -10,9 +10,29 @@ class AllTasks extends React.Component {
     let list = lists.find(list => list.id === listId);
 
     tasksInList = tasksInList.length > 0 ? (tasksInList.map( (task) =>
-      <li key={task.id}>
-        {task.title}
-      </li>
+    <div key={task.id}>
+      <div
+        id="toggle-completion"
+        name="toggle-completion"
+      />
+
+      <input
+        id="enter-task-title"
+        name="title"
+        type="text"
+        value={task.title}
+      />
+
+      <div
+        id="toggle-editable"
+        name="toggle-editable"
+      />
+
+      <div
+        id="delete-item"
+        name="delete-item"
+      />
+    </div>
     )) : null;
 
     return <TodoListContent
