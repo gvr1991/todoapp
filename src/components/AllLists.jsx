@@ -38,17 +38,37 @@ class ConnectedLists extends React.Component {
     const projectId = match.params['projectId'];
     const project = projects.find(project => project.id === projectId);
     let listsInProject = lists ? lists.filter(list => list.projectId === projectId) : [];
+    let linksToOtherProjects = projects.filter(project => project.id !== projectId);
+
+    linksToOtherProjects = linksToOtherProjects.length > 0 ? (linksToOtherProjects.map( (project) =>
+      <div key={project.id} >
+        <Link to={`/project/${project.id}/lists`} >
+          {project.title}
+        </Link>
+        <br />
+      </div>
+    )) : null;
 
     listsInProject = listsInProject.length > 0 ? (listsInProject.map( (list) =>
       <li key={list.id}>
-        <Link to={`/project/${list.projectId}/list/${list.id}/tasks`}>
+        <Link to={`/project/${projectId}/list/${list.id}/tasks`} >
           {list.title}
         </Link>
       </li>
     )) : null;
 
+    const headerElement = (
+      <div className="horizontally-aligned">
+        <Link to={`/projects`} >
+          {` All Projects `}
+        </Link>
+      </div>
+    );
+
     return <TodoListContent
-      header={project.title}
+      header={headerElement}
+      leftSidebar={linksToOtherProjects}
+      contentTitle={project.title}
       onEnter={this.handleListCreate}
       placeholder="Create lists as a todo-list"
       listItems={listsInProject}

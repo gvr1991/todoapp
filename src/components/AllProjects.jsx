@@ -25,9 +25,19 @@ class ConnectedProjects extends React.Component {
       return;
     }
 
-    this.props.sendCreate({
+    const { sendCreate } = this.props;
+
+    sendCreate({
       id: UUID.v4(),
       title,
+    });
+  }
+
+  handleProjectDelete = (params) => {
+    const { sendDelete } = this.props;
+
+    sendDelete({
+      id: params.id,
     });
   }
 
@@ -42,9 +52,18 @@ class ConnectedProjects extends React.Component {
       </li>
     )) : null;
 
+    const headerElement = (
+      <div className="horizontally-aligned">
+        <br />
+      </div>
+    );
+
     return <TodoListContent
-      header="All Projects"
+      header={headerElement}
+      leftSidebar={null}
+      contentTitle="All Projects"
       onEnter={this.handleProjectCreate}
+      onDelete={this.handleProjectDelete}
       placeholder="Create projects as a todo-list"
       listItems={allProjects}
       urlParams={match.params}

@@ -18,10 +18,9 @@ function rootReducer(state = initialState, action) {
 
     case ACTION_TYPES.DELETE_PROJECT:
       const projects = state.projects;
-      projects.delete(action.payload);
 
       return Object.assign({}, state, {
-        projects: projects,
+        projects: projects.filter(project => project.id !== action.payload.id),
       });
 
     case ACTION_TYPES.CREATE_LIST:
