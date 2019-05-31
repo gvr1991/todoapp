@@ -33,6 +33,12 @@ class ConnectedLists extends React.Component {
     });
   }
 
+  handleDelete = (id) => {
+    const { sendDelete } = this.props;
+
+    sendDelete({ id });
+  }
+
   render() {
     const { match, lists, projects } = this.props;
     const projectId = match.params['projectId'];
@@ -50,11 +56,14 @@ class ConnectedLists extends React.Component {
     )) : null;
 
     listsInProject = listsInProject.length > 0 ? (listsInProject.map( (list) =>
-      <li key={list.id}>
-        <Link to={`/project/${projectId}/list/${list.id}/tasks`} >
-          {list.title}
-        </Link>
-      </li>
+      <div className="horizontally-aligned" key={list.id}>
+        <li>
+          <Link to={`/project/${projectId}/list/${list.id}/tasks`} >
+            {list.title}
+          </Link>
+        </li>
+        <button onClick={() => this.handleDelete(list.id)} >X</button>
+      </div>
     )) : null;
 
     const headerElement = (

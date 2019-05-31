@@ -37,6 +37,7 @@ class ConnectedTasks extends React.Component {
       title,
       listId: params['listId'],
       projectId: params['projectId'],
+      parent: params['parentId'],
     });
   }
 
@@ -50,12 +51,12 @@ class ConnectedTasks extends React.Component {
     }
   }
 
-  handleChange = (id, event) => {
+  handleChange = (id, title) => {
     const { sendUpdate } = this.props;
 
     sendUpdate({
       id,
-      title: event.target.value,
+      title,
     });
   }
 
@@ -78,10 +79,7 @@ class ConnectedTasks extends React.Component {
       } else {
         // Indent if applicable
       }
-
       event.preventDefault();
-      const thisTask = this.props.tasks.find(task => task.id === id);
-      console.log(thisTask);
     }
   }
 
@@ -114,11 +112,11 @@ class ConnectedTasks extends React.Component {
         <input
           name="title"
           type="text"
-          onChange={(event) => this.handleChange(task.id, event)}
+          onChange={(event) => this.handleChange(task.id, event.target.value)}
           onKeyDown={(event) => this.handleKeyDown(task.id, event)}
           value={task.title}
         />
-        <button disabled={false} onClick={() => this.handleDelete(task.id)} >X</button>
+        <button onClick={() => this.handleDelete(task.id)} >X</button>
       </div>
     )) : null;
 

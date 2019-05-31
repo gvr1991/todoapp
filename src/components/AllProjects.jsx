@@ -33,23 +33,24 @@ class ConnectedProjects extends React.Component {
     });
   }
 
-  handleProjectDelete = (params) => {
+  handleDelete = (id) => {
     const { sendDelete } = this.props;
 
-    sendDelete({
-      id: params.id,
-    });
+    sendDelete({ id });
   }
 
   render() {
     const { match, projects } = this.props;
 
     const allProjects = projects ? (projects.map( (project) =>
-      <li key={project.id}>
-        <Link to={`/project/${project.id}/lists`}>
-          {project.title}
-        </Link>
-      </li>
+      <div className="horizontally-aligned" key={project.id}>
+        <li>
+          <Link to={`/project/${project.id}/lists`}>
+            {project.title}
+          </Link>
+        </li>
+        <button onClick={() => this.handleDelete(project.id)} >X</button>
+      </div>
     )) : null;
 
     const headerElement = (

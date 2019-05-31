@@ -20,12 +20,28 @@ const initialState = {
       title: "Project 1 List 1 Task 1",
       listId: "2",
       projectId: "1",
-      parent: 'root',
+      parent: "root",
       position: 1,
       isCompleted: false,
     },
   ],
 };
+
+function updateTask(state, payload) {
+  const { tasks } = state;
+  const task = tasks.find(task => task.id === payload.id);
+
+  const newTask = {
+    ...task,
+    ...payload,
+  };
+
+  tasks[tasks.indexOf(task)] = newTask;
+
+  return Object.assign({}, state, {
+    tasks: [ ...tasks ],
+  });
+}
 
 function rootReducer(state = initialState, action) {
   switch (action.type) {
@@ -40,11 +56,15 @@ function rootReducer(state = initialState, action) {
     }
 
     case ACTION_TYPES.DELETE_PROJECT: {
-      const projects = state.projects;
+      const projectId = action.payload.id;
 
-      return Object.assign({}, state, {
-        projects: projects.filter(project => project.id !== action.payload.id),
-      });
+      return {
+        ...state,
+        projects: [ ...state.projects.filter(project => project.id !== projectId) ],
+        lists: [ ...state.lists.filter(list => list.projectId !== projectId) ],
+        tasks: [ ...state.tasks.filter(task => task.projectId !== projectId) ],
+      };
+
     }
 
     case ACTION_TYPES.CREATE_LIST: {
@@ -58,7 +78,13 @@ function rootReducer(state = initialState, action) {
     }
 
     case ACTION_TYPES.DELETE_LIST: {
-      break;
+      const listId = action.payload.id;
+
+      return {
+        ...state,
+        lists: [ ...state.lists.filter(list => list.id !== listId) ],
+        tasks: [ ...state.tasks.filter(task => task.listId !== listId) ],
+      };
     }
 
     case ACTION_TYPES.CREATE_TASK: {
@@ -71,49 +97,27 @@ function rootReducer(state = initialState, action) {
     }
 
     case ACTION_TYPES.UPDATE_TASK: {
-      const newState = { ...state };
-      const { tasks } = newState;
-      const oldTask = tasks.find(task => task.id === action.payload.id);
-      const tasksWithoutOldtask = tasks.filter(el => el.id !== oldTask.id);
-      const newTask = {
-        ...oldTask,
-        ...action.payload,
-      }
-
-      return {
-        ...newState,
-        tasks: [...tasksWithoutOldtask, newTask],
-      };
+      return updateTask(state, action.payload);
     }
 
     case ACTION_TYPES.COMPLETE_TASK: {
-      const taskId = action.payload.id;
-      const unchangedTasks = state.tasks.filter(task => task.id !== taskId);
-      let changedTask = state.tasks.find(task => task.id === taskId);
-      changedTask.isCompleted = true;
-
-      return Object.assign({}, state, {
-        tasks: [ ...unchangedTasks,  changedTask],
+      return updateTask(state, {
+        ...action.payload,
+        isCompleted: true,
       });
     }
 
     case ACTION_TYPES.UNCOMPLETE_TASK: {
-      const taskId = action.payload.id;
-      const unchangedTasks = state.tasks.filter(task => task.id !== taskId);
-      const changedTask = state.tasks.find(task => task.id === taskId);
-      changedTask.isCompleted = false;
-
-      return Object.assign({}, state, {
-        tasks: [ ...unchangedTasks,  changedTask],
+      return updateTask(state, {
+        ...action.payload,
+        isCompleted: false
       });
     }
 
     case ACTION_TYPES.DELETE_TASK: {
-      const newState = { ...state };
-
       return {
-        ...newState,
-        tasks: newState.tasks.filter(task => task.id !== action.payload.id),
+        ...state,
+        tasks: state.tasks.filter(task => task.id !== action.payload.id),
       };
     }
 
