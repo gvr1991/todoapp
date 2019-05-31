@@ -11,10 +11,10 @@ class TodoListContent extends React.Component {
   }
 
   handleCreate = (event) => {
-    const { onEnter, urlParams } = this.props;
-    const { value } = this.state;
-
     if (event.key === 'Enter') {
+      const { onEnter, urlParams } = this.props;
+      const { value } = this.state;
+
       onEnter(urlParams, value);
 
       this.setState({
@@ -38,6 +38,7 @@ class TodoListContent extends React.Component {
   render() {
     const { header, leftSidebar, placeholder, contentTitle, listItems } = this.props;
     const { value } = this.state;
+
     const topDivision = (
       <div>
         <div id="header">
@@ -62,7 +63,7 @@ class TodoListContent extends React.Component {
               onKeyPress={this.handleCreate}
               placeholder={placeholder}
             />
-
+            <br />
             {listItems}
           </div>
         </div>

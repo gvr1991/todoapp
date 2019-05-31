@@ -26,7 +26,6 @@ export function deleteList(payload) {
   return { type: ACTION_TYPES.DELETE_LIST, payload }
 };
 
-
 // Task actions
 export function createTask(payload) {
   return { type: ACTION_TYPES.CREATE_TASK, payload }
@@ -40,18 +39,16 @@ export function completeTask(payload) {
   return {
     type: ACTION_TYPES.COMPLETE_TASK,
     payload: {
-      id: payload.id,
-      isCompleted: true,
+      id: payload.id
     }
   }
 };
 
 export function uncompleteTask(payload) {
   return {
-    type: ACTION_TYPES.COMPLETE_TASK,
+    type: ACTION_TYPES.UNCOMPLETE_TASK,
     payload: {
-      id: payload.id,
-      isCompleted: false,
+      id: payload.id
     }
   }
 };

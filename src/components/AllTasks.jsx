@@ -3,7 +3,7 @@ import { default as UUID } from 'uuid';
 import { Link } from "react-router-dom";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
-import { createTask, updateTask, deleteTask } from '../actions/index';
+import { createTask, updateTask, completeTask, uncompleteTask, deleteTask } from '../actions/index';
 import TodoListContent from './TodoListContent';
 
 const mapStateToProps = (state) => {
@@ -16,9 +16,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    sendCreate: (task) => dispatch(createTask(task)),
-    sendUpdate: (task) => dispatch(updateTask(task)),
-    sendDelete: (task) => dispatch(deleteTask(task)),
+    sendCreate: (payload) => dispatch(createTask(payload)),
+    sendUpdate: (payload) => dispatch(updateTask(payload)),
+    sendComplete: (payload) => dispatch(completeTask(payload)),
+    sendUncomplete: (payload) => dispatch(uncompleteTask(payload)),
+    sendDelete: (payload) => dispatch(deleteTask(payload)),
   }
 }
 
@@ -28,12 +30,59 @@ class ConnectedTasks extends React.Component {
       return;
     }
 
-    this.props.sendCreate({
+    const { sendCreate } = this.props;
+
+    sendCreate({
       id: UUID.v4(),
       title,
       listId: params['listId'],
       projectId: params['projectId'],
     });
+  }
+
+  toggleCompletion = (id, isCompleted) => {
+    const { sendComplete, sendUncomplete } = this.props;
+
+    if (isCompleted) {
+      sendUncomplete({ id })
+    } else {
+      sendComplete({ id })
+    }
+  }
+
+  handleChange = (id, event) => {
+    const { sendUpdate } = this.props;
+
+    sendUpdate({
+      id,
+      title: event.target.value,
+    });
+  }
+
+  handleDelete = (id) => {
+    const { sendDelete } = this.props;
+
+    sendDelete({ id });
+  }
+
+  handleKeyDown = (id, event) => {
+    const task = this.props.tasks.find(task => task.id === id);
+
+    if (event.key === 'Backspace') {
+      if (task.title === "") {
+        this.handleDelete(id);
+      }
+    } else if (event.key === 'Tab') {
+      if (event.shiftKey) {
+        // Outdent if applicable
+      } else {
+        // Indent if applicable
+      }
+
+      event.preventDefault();
+      const thisTask = this.props.tasks.find(task => task.id === id);
+      console.log(thisTask);
+    }
   }
 
   render() {
@@ -56,17 +105,20 @@ class ConnectedTasks extends React.Component {
 
     tasksInList = tasksInList.length > 0 ? (tasksInList.map( (task) =>
       <div className="horizontally-aligned" key={task.id}>
-        <section>C</section>
         <input
-          id="enter-task-title"
+          name="toggle-completion"
+          type="checkbox"
+          checked={task.isCompleted}
+          onChange={() => this.toggleCompletion(task.id, task.isCompleted)}
+        />
+        <input
           name="title"
           type="text"
-          onChange={(event) => this.onTitleChange(task.id, event)}
-          onKeyPress={(event) => this.handleTaskEdit(task.id, event)}
+          onChange={(event) => this.handleChange(task.id, event)}
+          onKeyDown={(event) => this.handleKeyDown(task.id, event)}
           value={task.title}
         />
-        <section>E</section>
-        <section>X</section>
+        <button disabled={false} onClick={() => this.handleDelete(task.id)} >X</button>
       </div>
     )) : null;
 
