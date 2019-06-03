@@ -5,6 +5,7 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { createTask, updateTask, completeTask, uncompleteTask, deleteTask } from '../actions/index';
 import TodoListContent from './TodoListContent';
+import OrderedTaskElements from './OrderedTaskElements';
 import * as CONSTANTS from '../constants/index';
 
 const mapStateToProps = (state) => {
@@ -81,26 +82,13 @@ class ConnectedTasks extends React.Component {
     return orderedTasks.find(task => task.id === parent.parentId).id;
   }
 
-  stepsToRoot(thisTask, allTasks) {
-    let result = 0;
-    while (thisTask.parentId !== CONSTANTS.LIST_ROOT) {
-      result += 1;
-      thisTask = allTasks.find(task => thisTask.parentId === task.id);
-
-      if ( !thisTask ) {
-        return result;
-      }
-    }
-    return result;
-  }
-
   getNewPosition(parentId, tasks) {
     return tasks.filter(task => task.parentId === parentId).length + 1;
   }
 
   // Util methods end here
 
-  doIndent(thisTask, orderedTasks) {
+  doIndent(thisTask, orderedTasks, event) {
     const index = orderedTasks.indexOf(thisTask);
 
     if (index === 0 || index === -1) {
@@ -116,17 +104,17 @@ class ConnectedTasks extends React.Component {
     if (thisTask.parentId !== previousSiblingId) {
       const { sendUpdate } = this.props;
 
-      console.log("Indent");
-
       sendUpdate({
         id: thisTask.id,
         parentId: previousSiblingId,
         position: this.getNewPosition(previousSiblingId, orderedTasks),
       });
+
+      event.preventDefault();
     }
   }
 
-  doOutdent(thisTask, orderedTasks) {
+  doOutdent(thisTask, orderedTasks, event) {
     if (thisTask.parentId === CONSTANTS.LIST_ROOT) {
       return;
     }
@@ -134,13 +122,13 @@ class ConnectedTasks extends React.Component {
     const grandParentId = this.getGrandParentId(thisTask, orderedTasks);
     const { sendUpdate } = this.props;
 
-    console.log("Outdent");
-
     sendUpdate({
       id: thisTask.id,
       parentId: grandParentId,
       position: this.getNewPosition(grandParentId, orderedTasks),
     });
+
+    event.preventDefault();
   }
 
   handleTaskCreate = (params, title) => {
@@ -188,7 +176,7 @@ class ConnectedTasks extends React.Component {
     sendDelete({ id });
   }
 
-  handleIndent = (id) => {
+  handleIndent = (id, event) => {
     let { tasks } = this.props;
     const thisTask = tasks.find(task => task.id === id);
 
@@ -199,10 +187,10 @@ class ConnectedTasks extends React.Component {
     tasks = tasks.filter(task => task.listId === thisTask.listId);
     tasks = this.orderTasks(CONSTANTS.LIST_ROOT, [], tasks)
 
-    this.doIndent(thisTask, tasks);
+    this.doIndent(thisTask, tasks, event);
   }
 
-  handleOutdent = (id) => {
+  handleOutdent = (id, event) => {
     let { tasks } = this.props;
     const thisTask = tasks.find(task => task.id === id);
 
@@ -213,7 +201,7 @@ class ConnectedTasks extends React.Component {
     tasks = tasks.filter(task => task.listId === thisTask.listId);
     tasks = this.orderTasks(CONSTANTS.LIST_ROOT, [], tasks)
 
-    this.doOutdent(thisTask, tasks);
+    this.doOutdent(thisTask, tasks, event);
   }
 
   handleKeyDown = (id, event) => {
@@ -259,25 +247,13 @@ class ConnectedTasks extends React.Component {
       <br />
     </div>);
 
-    const taskElements = tasksInList.length > 0 ? (tasksInList.map( (task) =>
-      <div className='horizontally-aligned' key={task.id}>
-        {this.stepsToRoot(task, tasksInList)}
-        <input
-          name='toggle-completion'
-          type='checkbox'
-          checked={task.isCompleted}
-          onChange={() => this.handleToggleCompletion(task.id, task.isCompleted)}
-        />
-        <input
-          name='title'
-          type='text'
-          onChange={(event) => this.handleChange(task.id, event.target.value)}
-          onKeyDown={(event) => this.handleKeyDown(task.id, event)}
-          value={task.title}
-        />
-        <button onClick={() => this.handleDelete(task.id)} >X</button>
-      </div>
-    )) : null;
+    const taskElements = <OrderedTaskElements
+      tasks={tasksInList}
+      onToggleCompletion={this.handleToggleCompletion}
+      onChange={this.handleChange}
+      onKeyDown={this.handleKeyDown}
+      onDelete={this.handleDelete}
+    />;
 
     const headerElement = (
       <div className='horizontally-aligned'>
