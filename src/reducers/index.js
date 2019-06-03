@@ -1,31 +1,47 @@
 import * as ACTION_TYPES from "../constants/action-types";
+import { default as UUID } from 'uuid';
 
-const initialState = {
-  projects: [
-    {
-      id: "1",
-      title: "Project 1",
-    },
-  ],
-  lists: [
-    {
-      id: "2",
-      title: "Project 1 List 1",
-      projectId: "1",
-    },
-  ],
-  tasks: [
-    {
-      id: "3",
-      title: "Project 1 List 1 Task 1",
-      listId: "2",
-      projectId: "1",
-      parent: "root",
-      position: 1,
-      isCompleted: false,
-    },
-  ],
-};
+const initialState = generateData(5, 5, 5);
+
+function generateData(projectsCount, listsCount, tasksCount) {
+  const projects = [];
+  const lists = [];
+  const tasks = [];
+
+  for (let i = 1; i <= projectsCount; i++) {
+    const project = {
+      id: UUID.v4(),
+      title: "Project " + i,
+    };
+    projects.push(project);
+
+    for (let j = 1; j <= listsCount; j++) {
+      const list = {
+        id: UUID.v4(),
+        title: "Project " + i + " - List " + j,
+        projectId: project.id,
+      }
+      lists.push(list);
+
+      for (let k = 1; k <= tasksCount; k++) {
+        tasks.push({
+          id: UUID.v4(),
+          title: "Project " + i + " - List " + j + " - Task " + k,
+          listId: list.id,
+          projectId: project.id,
+          isCompleted: false,
+          parentId: "root",
+        });
+      }
+    }
+  }
+
+  return {
+    projects: projects,
+    lists: lists,
+    tasks: tasks,
+  }
+}
 
 function updateTask(state, payload) {
   const { tasks } = state;
@@ -60,9 +76,9 @@ function rootReducer(state = initialState, action) {
 
       return {
         ...state,
-        projects: [ ...state.projects.filter(project => project.id !== projectId) ],
-        lists: [ ...state.lists.filter(list => list.projectId !== projectId) ],
-        tasks: [ ...state.tasks.filter(task => task.projectId !== projectId) ],
+        projects: state.projects.filter(project => project.id !== projectId),
+        lists: state.lists.filter(list => list.projectId !== projectId),
+        tasks: state.tasks.filter(task => task.projectId !== projectId),
       };
 
     }
@@ -82,8 +98,8 @@ function rootReducer(state = initialState, action) {
 
       return {
         ...state,
-        lists: [ ...state.lists.filter(list => list.id !== listId) ],
-        tasks: [ ...state.tasks.filter(task => task.listId !== listId) ],
+        lists: state.lists.filter(list => list.id !== listId),
+        tasks: state.tasks.filter(task => task.listId !== listId),
       };
     }
 

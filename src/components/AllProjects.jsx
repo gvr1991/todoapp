@@ -59,9 +59,15 @@ class ConnectedProjects extends React.Component {
       </div>
     );
 
+    const sidebarElement = (
+    <div style={{ height: "calc(100vh)" }}>
+      <h1>Welcome</h1>
+    </div>
+    );
+
     return <TodoListContent
       header={headerElement}
-      leftSidebar={null}
+      leftSidebar={sidebarElement}
       contentTitle="All Projects"
       onEnter={this.handleProjectCreate}
       onDelete={this.handleProjectDelete}

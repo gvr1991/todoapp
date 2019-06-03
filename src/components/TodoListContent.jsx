@@ -46,8 +46,6 @@ class TodoListContent extends React.Component {
         </div>
         <div className="horizontally-aligned">
           <div id="left-sidebar">
-            <h1>Links</h1>
-            <br />
             {leftSidebar}
             <br />
           </div>

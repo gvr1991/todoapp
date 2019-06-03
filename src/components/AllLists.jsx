@@ -55,6 +55,13 @@ class ConnectedLists extends React.Component {
       </div>
     )) : null;
 
+    const sidebarElement = (<div>
+      <h1>{"Other projects"}</h1>
+      <br />
+      {linksToOtherProjects}
+      <br />
+    </div>);
+
     listsInProject = listsInProject.length > 0 ? (listsInProject.map( (list) =>
       <div className="horizontally-aligned" key={list.id}>
         <li>
@@ -76,7 +83,7 @@ class ConnectedLists extends React.Component {
 
     return <TodoListContent
       header={headerElement}
-      leftSidebar={linksToOtherProjects}
+      leftSidebar={sidebarElement}
       contentTitle={project.title}
       onEnter={this.handleListCreate}
       placeholder="Create lists as a todo-list"
