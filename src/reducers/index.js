@@ -1,4 +1,6 @@
-import * as ACTION_TYPES from "../constants/action-types";
+import * as ACTION_TYPES from '../constants/action-types';
+import * as CONSTANTS from '../constants/index';
+
 import { default as UUID } from 'uuid';
 
 const initialState = generateData(5, 5, 5);
@@ -11,14 +13,14 @@ function generateData(projectsCount, listsCount, tasksCount) {
   for (let i = 1; i <= projectsCount; i++) {
     const project = {
       id: UUID.v4(),
-      title: "Project " + i,
+      title: 'Project ' + i,
     };
     projects.push(project);
 
     for (let j = 1; j <= listsCount; j++) {
       const list = {
         id: UUID.v4(),
-        title: "Project " + i + " - List " + j,
+        title: 'Project ' + i + ' - List ' + j,
         projectId: project.id,
       }
       lists.push(list);
@@ -26,11 +28,12 @@ function generateData(projectsCount, listsCount, tasksCount) {
       for (let k = 1; k <= tasksCount; k++) {
         tasks.push({
           id: UUID.v4(),
-          title: "Project " + i + " - List " + j + " - Task " + k,
+          title: 'Project ' + i + ' - List ' + j + ' - Task ' + k,
           listId: list.id,
           projectId: project.id,
           isCompleted: false,
-          parentId: "root",
+          parentId: CONSTANTS.LIST_ROOT,
+          position: k,
         });
       }
     }
