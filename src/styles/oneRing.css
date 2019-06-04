@@ -92,8 +92,8 @@ div#left-sidebar {
   line-height: 2em;
   border: 0;
   padding: 10px;
-  /* margin-bottom: 2px; */
-  /* border: 0.1px solid #999999; */
+  margin-bottom: 2px;
+  border: 0.1px solid #999999;
   box-shadow: rgba(0, 0, 0.4, 50) 0.5px 1px 2px 0.5px inset;
 }
 
@@ -107,8 +107,8 @@ div#left-sidebar {
   line-height: 2.4em;
   border: 0;
   padding: 10px;
-  /* margin-left: 0px; */
-  /* margin-bottom: 2px; */
+  margin-left: 0px;
+  margin-bottom: 2px;
   border: 0.1px solid #999999;
   /* box-shadow: rgba(0, 0, 0.4, 50) 0.5px 1px 2px 0.5px inset; */
 }

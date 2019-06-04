@@ -7,6 +7,7 @@ import { createTask, updateTask, completeTask, uncompleteTask, deleteTask } from
 import TodoListContent from './TodoListContent';
 import OrderedTaskElements from './OrderedTaskElements';
 import * as CONSTANTS from '../constants/index';
+import { orderTasks, getPreviousSiblingId, getGrandParentId, getNewPosition } from '../utils/taskPageUtils';
 
 const mapStateToProps = (state) => {
   return {
@@ -27,67 +28,6 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 class ConnectedTasks extends React.Component {
-  // Util methods begin here
-
-  compare(taskA, taskB) {
-    if (taskA.position < taskB.position) {
-      return -1;
-    }
-    if (taskA.position > taskB.position) {
-      return 1;
-    }
-    return 0;
-  }
-
-  orderTasks(parentId, resultList, tasks) {
-    const theseTasks = tasks.filter(task => task.parentId === parentId);
-
-    if (theseTasks.length === 0) {
-      return resultList;
-    }
-
-    theseTasks.sort(this.compare);
-
-    for (const task of theseTasks) {
-      resultList.push(task);
-      this.orderTasks(task.id, resultList, tasks);
-    }
-
-    return resultList;
-  }
-
-  getPreviousSiblingId(thisTask, orderedTasks) {
-    const siblings = orderedTasks.filter(task => task.parentId === thisTask.parentId);
-    const index = siblings.indexOf(thisTask);
-
-    if (index === 0 || index === -1) {
-      return null;
-    }
-
-    const previousSibling = siblings[index - 1];
-
-    return previousSibling.id;
-  }
-
-  getGrandParentId(thisTask, orderedTasks) {
-    const parent = orderedTasks.find(task => task.id === thisTask.parentId);
-
-    if (!parent) {
-      return CONSTANTS.LIST_ROOT;
-    }
-
-    if (parent.parentId === CONSTANTS.LIST_ROOT) {
-      return CONSTANTS.LIST_ROOT;
-    }
-    return orderedTasks.find(task => task.id === parent.parentId).id;
-  }
-
-  getNewPosition(parentId, tasks) {
-    return tasks.filter(task => task.parentId === parentId).length + 1;
-  }
-
-  // Util methods end here
-
   doIndent(thisTask, orderedTasks, event) {
     const index = orderedTasks.indexOf(thisTask);
 
@@ -95,7 +35,7 @@ class ConnectedTasks extends React.Component {
       return;
     }
 
-    const previousSiblingId = this.getPreviousSiblingId(thisTask, orderedTasks);
+    const previousSiblingId = getPreviousSiblingId(thisTask, orderedTasks);
 
     if (!previousSiblingId) {
       return;
@@ -107,9 +47,10 @@ class ConnectedTasks extends React.Component {
       sendUpdate({
         id: thisTask.id,
         parentId: previousSiblingId,
-        position: this.getNewPosition(previousSiblingId, orderedTasks),
+        position: getNewPosition(previousSiblingId, orderedTasks),
       });
 
+      console.log(this.props.tasks.map( (task) => "id" + task.id + ":pos=" + task.position + ":parent=" + task.parentId));
       event.preventDefault();
     }
   }
@@ -119,15 +60,16 @@ class ConnectedTasks extends React.Component {
       return;
     }
 
-    const grandParentId = this.getGrandParentId(thisTask, orderedTasks);
+    const grandParentId = getGrandParentId(thisTask, orderedTasks);
     const { sendUpdate } = this.props;
 
     sendUpdate({
       id: thisTask.id,
       parentId: grandParentId,
-      position: this.getNewPosition(grandParentId, orderedTasks),
+      position: getNewPosition(grandParentId, orderedTasks) - 1,
     });
 
+    console.log(this.props.tasks.map( (task) => "id" + task.id + ":pos=" + task.position + ":parent=" + task.parentId));
     event.preventDefault();
   }
 
@@ -139,7 +81,7 @@ class ConnectedTasks extends React.Component {
     const { sendCreate, tasks } = this.props;
     const parentId = CONSTANTS.LIST_ROOT;
     const listTasks = tasks.filter( task => task.listId === params['listId']);
-    const position = this.getNewPosition(parentId, listTasks);
+    const position = getNewPosition(parentId, listTasks);
 
     sendCreate({
       id: UUID.v4(),
@@ -185,7 +127,7 @@ class ConnectedTasks extends React.Component {
     }
 
     tasks = tasks.filter(task => task.listId === thisTask.listId);
-    tasks = this.orderTasks(CONSTANTS.LIST_ROOT, [], tasks)
+    tasks = orderTasks(CONSTANTS.LIST_ROOT, [], tasks)
 
     this.doIndent(thisTask, tasks, event);
   }
@@ -199,7 +141,7 @@ class ConnectedTasks extends React.Component {
     }
 
     tasks = tasks.filter(task => task.listId === thisTask.listId);
-    tasks = this.orderTasks(CONSTANTS.LIST_ROOT, [], tasks)
+    tasks = orderTasks(CONSTANTS.LIST_ROOT, [], tasks)
 
     this.doOutdent(thisTask, tasks, event);
   }
@@ -248,7 +190,7 @@ class ConnectedTasks extends React.Component {
     </div>);
 
     const taskElements = <OrderedTaskElements
-      tasks={tasksInList}
+      tasks={orderTasks(CONSTANTS.LIST_ROOT, [], tasksInList)}
       onToggleCompletion={this.handleToggleCompletion}
       onChange={this.handleChange}
       onKeyDown={this.handleKeyDown}

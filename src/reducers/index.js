@@ -3,7 +3,7 @@ import * as CONSTANTS from '../constants/index';
 
 import { default as UUID } from 'uuid';
 
-const initialState = generateData(5, 5, 5);
+const initialState = generateData(1, 1, 10);
 
 function generateData(projectsCount, listsCount, tasksCount) {
   const projects = [];
@@ -60,6 +60,21 @@ function updateTask(state, payload) {
   return Object.assign({}, state, {
     tasks: [ ...tasks ],
   });
+}
+
+function getDescendantIds(id, result = [], tasks) {
+  const children = tasks.filter(task => task.parentId === id);
+  result.push(id);
+
+  if (children.length === 0) {
+    return result;
+  }
+
+  for (const child of children) {
+    getDescendantIds(child.id, result, tasks);
+  }
+
+  return result;
 }
 
 function rootReducer(state = initialState, action) {
@@ -134,9 +149,11 @@ function rootReducer(state = initialState, action) {
     }
 
     case ACTION_TYPES.DELETE_TASK: {
+      const descendantIds = getDescendantIds(action.payload.id, [], state.tasks);
+
       return {
         ...state,
-        tasks: state.tasks.filter(task => task.id !== action.payload.id),
+        tasks: state.tasks.filter(task => descendantIds.indexOf(task.id) < 0),
       };
     }
 
