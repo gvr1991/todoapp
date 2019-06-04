@@ -54,10 +54,10 @@ export function getGrandParentId(thisTask, orderedTasks) {
   return orderedTasks.find(task => task.id === parent.parentId).id;
 }
 
-export function getTaskPosition(taskId, tasks) {
-  return tasks.filter(task => task.id === taskId).position;
-}
-
 export function getNewPosition(parentId, tasks) {
-  return tasks.filter(task => task.parentId === parentId).length + 1;
+  const siblings = tasks.filter(task => task.parentId === parentId);
+  siblings.sort(compare);
+
+  if (siblings.length === 0) return 1;
+  return siblings[siblings.length - 1].position + 1;
 }

@@ -66,7 +66,7 @@ class ConnectedTasks extends React.Component {
     sendUpdate({
       id: thisTask.id,
       parentId: grandParentId,
-      position: getNewPosition(grandParentId, orderedTasks) - 1,
+      position: getNewPosition(grandParentId, orderedTasks),
     });
 
     console.log(this.props.tasks.map( (task) => "id" + task.id + ":pos=" + task.position + ":parent=" + task.parentId));
