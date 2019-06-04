@@ -5,9 +5,8 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { createTask, updateTask, completeTask, uncompleteTask, deleteTask } from '../actions/index';
 import TodoListContent from './TodoListContent';
-import OrderedTaskElements from './OrderedTaskElements';
 import * as CONSTANTS from '../constants/index';
-import { orderTasks, getPreviousSiblingId, getGrandParentId, getNewPosition } from '../utils/taskPageUtils';
+import { orderTasks, getPreviousSibling, getNextSibling, getGrandParentId, getNewPosition } from '../utils/taskPageUtils';
 
 const mapStateToProps = (state) => {
   return {
@@ -35,22 +34,21 @@ class ConnectedTasks extends React.Component {
       return;
     }
 
-    const previousSiblingId = getPreviousSiblingId(thisTask, orderedTasks);
-
-    if (!previousSiblingId) {
+    const previousSibling = getPreviousSibling(thisTask, orderedTasks);
+    if (previousSibling == null) {
       return;
     }
 
-    if (thisTask.parentId !== previousSiblingId) {
+    if (thisTask.parentId !== previousSibling.id) {
       const { sendUpdate } = this.props;
 
       sendUpdate({
         id: thisTask.id,
-        parentId: previousSiblingId,
-        position: getNewPosition(previousSiblingId, orderedTasks),
+        parentId: previousSibling.id,
+        position: getNewPosition(previousSibling.id, orderedTasks),
       });
 
-      console.log(this.props.tasks.map( (task) => "id" + task.id + ":pos=" + task.position + ":parent=" + task.parentId));
+      // console.log(this.props.tasks.map( (task) => "id" + task.id + ":pos=" + task.position + ":parent=" + task.parentId));
       event.preventDefault();
     }
   }
@@ -61,6 +59,10 @@ class ConnectedTasks extends React.Component {
     }
 
     const grandParentId = getGrandParentId(thisTask, orderedTasks);
+    if (!grandParentId) {
+      return;
+    }
+
     const { sendUpdate } = this.props;
 
     sendUpdate({
@@ -69,7 +71,7 @@ class ConnectedTasks extends React.Component {
       position: getNewPosition(grandParentId, orderedTasks),
     });
 
-    console.log(this.props.tasks.map( (task) => "id" + task.id + ":pos=" + task.position + ":parent=" + task.parentId));
+    // console.log(this.props.tasks.map( (task) => "id" + task.id + ":pos=" + task.position + ":parent=" + task.parentId));
     event.preventDefault();
   }
 
@@ -118,32 +120,60 @@ class ConnectedTasks extends React.Component {
     sendDelete({ id });
   }
 
-  handleIndent = (id, event) => {
+  handleIndentAndOutdent = (id, event, indent=true) => {
     let { tasks } = this.props;
     const thisTask = tasks.find(task => task.id === id);
-
-    if (!thisTask) {
-      return;
-    }
-
     tasks = tasks.filter(task => task.listId === thisTask.listId);
     tasks = orderTasks(CONSTANTS.LIST_ROOT, [], tasks)
 
-    this.doIndent(thisTask, tasks, event);
+    if (indent) {
+      this.doIndent(thisTask, tasks, event);
+    } else {
+      this.doOutdent(thisTask, tasks, event);
+    }
   }
 
-  handleOutdent = (id, event) => {
+  handleTaskShift = (id, up) => {
     let { tasks } = this.props;
     const thisTask = tasks.find(task => task.id === id);
 
-    if (!thisTask) {
+    if (thisTask == null) {
       return;
     }
 
     tasks = tasks.filter(task => task.listId === thisTask.listId);
-    tasks = orderTasks(CONSTANTS.LIST_ROOT, [], tasks)
+    tasks = orderTasks(CONSTANTS.LIST_ROOT, [], tasks);
+    let sibling = null;
 
-    this.doOutdent(thisTask, tasks, event);
+    if (up) {
+      sibling = getPreviousSibling(thisTask, tasks);
+    } else {
+      sibling = getNextSibling(thisTask, tasks);
+    }
+
+    if (sibling == null) {
+      return;
+    }
+
+    const { sendUpdate } = this.props;
+
+    sendUpdate({
+      id: thisTask.id,
+      position: sibling.position,
+    });
+
+    sendUpdate({
+      id: sibling.id,
+      position: thisTask.position,
+    });
+  }
+
+  handleMoveUp = (id) => {
+    this.handleTaskShift(id, true);
+  }
+
+  handleMoveDown = (id) => {
+    this.handleTaskShift(id, false);
   }
 
   handleKeyDown = (id, event) => {
@@ -156,11 +186,17 @@ class ConnectedTasks extends React.Component {
       }
     } else if (event.key === 'Tab') {
       if (event.shiftKey) {
-        this.handleOutdent(id, event);
+        this.handleIndentAndOutdent(id, event, false);
       } else {
-        this.handleIndent(id, event);
+        this.handleIndentAndOutdent(id, event, true);
       }
       event.preventDefault();
+    } else if (event.altKey || event.shiftKey) {
+      if (event.key === 'ArrowUp') {
+        this.handleMoveUp(id);
+      } else if (event.key === 'ArrowDown') {
+        this.handleMoveDown(id);
+      }
     }
   }
 
@@ -218,6 +254,42 @@ class ConnectedTasks extends React.Component {
       listItems={taskElements}
       urlParams={match.params}
     />;
+  }
+}
+
+class OrderedTaskElements extends React.Component {
+  renderTasks(parentId) {
+    const { tasks, onToggleCompletion, onChange, onKeyDown, onDelete } = this.props;
+    const siblings = tasks.filter(task => task.parentId === parentId);
+
+    const taskElements = siblings.length > 0 ? siblings.map( (task) =>
+      <li id='task' key={task.id}>
+        <div className='horizontally-aligned'>
+          <input
+            name='toggle-completion'
+            type='checkbox'
+            checked={task.isCompleted}
+            onChange={() => onToggleCompletion(task.id, task.isCompleted)}
+          />
+          <input
+            name='title'
+            type='text'
+            onChange={(event) => onChange(task.id, event.target.value)}
+            onKeyDown={(event) => onKeyDown(task.id, event)}
+            value={task.title}
+          />
+          <button onClick={() => onDelete(task.id)} >X</button>
+        </div>
+        <ul>
+        { this.renderTasks(task.id) }
+        </ul>
+      </li>) : null;
+
+    return taskElements;
+  }
+
+  render() {
+    return this.renderTasks(CONSTANTS.LIST_ROOT);
   }
 }
 

@@ -12,16 +12,16 @@ function generateData(projectsCount, listsCount, tasksCount) {
 
   for (let i = 1; i <= projectsCount; i++) {
     const project = {
-      id: UUID.v4(),
-      // id: i.toString(),
+      // id: UUID.v4(),
+      id: i.toString(),
       title: 'Project ' + i,
     };
     projects.push(project);
 
     for (let j = 1; j <= listsCount; j++) {
       const list = {
-        id: UUID.v4(),
-        // id: j.toString(),
+        // id: UUID.v4(),
+        id: j.toString(),
         title: 'Project ' + i + ' - List ' + j,
         projectId: project.id,
       }
@@ -29,8 +29,8 @@ function generateData(projectsCount, listsCount, tasksCount) {
 
       for (let k = 1; k <= tasksCount; k++) {
         tasks.push({
-          id: UUID.v4(),
-          // id: k.toString(),
+          // id: UUID.v4(),
+          id: k.toString(),
           title: 'Project ' + i + ' - List ' + j + ' - Task ' + k,
           listId: list.id,
           projectId: project.id,

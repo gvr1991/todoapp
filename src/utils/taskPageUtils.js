@@ -27,7 +27,7 @@ export function orderTasks(parentId, resultList, tasks) {
   return resultList;
 }
 
-export function getPreviousSiblingId(thisTask, orderedTasks) {
+export function getPreviousSibling(thisTask, orderedTasks) {
   const siblings = orderedTasks.filter(task => task.parentId === thisTask.parentId);
   const index = siblings.indexOf(thisTask);
 
@@ -35,9 +35,18 @@ export function getPreviousSiblingId(thisTask, orderedTasks) {
     return null;
   }
 
-  const previousSibling = siblings[index - 1];
+  return siblings[index - 1];
+}
 
-  return previousSibling.id;
+export function getNextSibling(thisTask, orderedTasks) {
+  const siblings = orderedTasks.filter(task => task.parentId === thisTask.parentId);
+  const index = siblings.indexOf(thisTask);
+
+  if (index === (orderedTasks.length - 1) || index === -1) {
+    return null;
+  }
+
+  return siblings[index + 1];
 }
 
 export function getGrandParentId(thisTask, orderedTasks) {
