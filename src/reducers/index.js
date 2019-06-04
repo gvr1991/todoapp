@@ -138,9 +138,15 @@ function rootReducer(state = initialState, action) {
     }
 
     case ACTION_TYPES.COMPLETE_TASK: {
-      return updateTask(state, {
-        ...action.payload,
-        isCompleted: true,
+      const newTasks = state.tasks;
+      const descendantIds = getDescendantIds(action.payload.id, [], state.tasks);
+
+      for (const id of descendantIds) {
+        newTasks.find(task => task.id === id).isCompleted = true;
+      }
+
+      return Object.assign({}, state, {
+        tasks: [ ...newTasks ],
       });
     }
 

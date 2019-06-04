@@ -3,7 +3,7 @@ import { default as UUID } from 'uuid';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import { createTask, updateTask, completeTask, uncompleteTask, deleteTask } from '../actions/index';
+import { createTask, updateTask, completeTask, uncompleteTask, deleteTask } from '../actions/task';
 import TodoListContent from './TodoListContent';
 import * as CONSTANTS from '../constants/index';
 import { orderTasks, getPreviousSibling, getNextSibling, getGrandParentId, getNewPosition } from '../utils/taskPageUtils';

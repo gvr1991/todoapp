@@ -3,7 +3,7 @@ import { default as UUID } from 'uuid';
 import { Link } from "react-router-dom";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
-import { createProject, deleteProject } from '../actions/index';
+import { createProject, deleteProject } from '../actions/project';
 import TodoListContent from './TodoListContent';
 
 const mapStateToProps = (state) => {
