@@ -1,13 +1,5 @@
 import React from 'react';
-import { withRouter } from 'react-router';
-import { connect } from 'react-redux';
 import '../styles/styles.css';
-
-const mapStateToProps = (state) => {
-  return {
-    notifications: state.notifications,
-  };
-};
 
 class TodoListContent extends React.Component {
   constructor(props) {
@@ -44,18 +36,11 @@ class TodoListContent extends React.Component {
   }
 
   render() {
-    const { notifications, header, leftSidebar, placeholder, contentTitle, listItems } = this.props;
+    const { header, leftSidebar, placeholder, contentTitle, listItems } = this.props;
     const { value } = this.state;
 
     const topDivision = (
       <div>
-        <div className="notification_container">
-          { notifications.map( (n) =>
-            <div className="notification_element" key={n.id} >
-              {n.text}
-            </div>) }
-        </div>
-
         <div id="header">
           {header}
         </div>
@@ -88,5 +73,4 @@ class TodoListContent extends React.Component {
   }
 }
 
-const ConnectedTodoList = connect(mapStateToProps)(TodoListContent);
-export default withRouter(ConnectedTodoList);
+export default TodoListContent;

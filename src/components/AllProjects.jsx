@@ -5,7 +5,7 @@ import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { createProject, deleteProject } from '../actions/project';
 import { showNotificationWithTimeout } from '../actions/notification';
-import ConnectedTodoList from './TodoListContent';
+import TodoListContent from './TodoListContent';
 
 const mapStateToProps = (state) => {
   return {
@@ -72,7 +72,7 @@ class ConnectedProjects extends React.Component {
     </div>
     );
 
-    return <ConnectedTodoList
+    return <TodoListContent
       header={headerElement}
       leftSidebar={sidebarElement}
       contentTitle="All Projects"

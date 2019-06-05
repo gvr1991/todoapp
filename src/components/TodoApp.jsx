@@ -3,12 +3,15 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import AllProjects from './AllProjects';
 import AllLists from './AllLists';
 import AllTasks from './AllTasks';
+import ConnectedNotifications from './Notifications';
 
 class TodoApp extends React.Component {
   render() {
     return (
-      <Router>
-        <div>
+      <div>
+        <Router>
+          <ConnectedNotifications />
+
           <Route
             path="/projects"
             component={ () => <AllProjects /> }
@@ -21,8 +24,8 @@ class TodoApp extends React.Component {
             path="/project/:projectId/list/:listId/tasks"
             component={ () => <AllTasks /> }
           />
-        </div>
-      </Router>
+        </Router>
+      </div>
     );
   }
 }

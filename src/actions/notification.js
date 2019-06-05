@@ -8,7 +8,7 @@ function showNotification(payload) {
   }
 };
 
-function hideNotification(payload) {
+export function hideNotification(payload) {
   return {
     type: ACTION_TYPES.HIDE_NOTIFICATION,
     payload,
@@ -16,8 +16,6 @@ function hideNotification(payload) {
 };
 
 export function showNotificationWithTimeout(text, timeout = 5000) {
-  // Thunk middleware automagically passes dispatch object to the below function
-
   return function(dispatch) {
     const id = UUID.v4();
     dispatch( showNotification({ id, text }) );
