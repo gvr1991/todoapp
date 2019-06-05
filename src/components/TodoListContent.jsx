@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import '../styles/oneRing.css';
+import '../styles/styles.css';
 
 const mapStateToProps = (state) => {
   return {
