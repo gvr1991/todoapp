@@ -15,3 +15,7 @@ export const UPDATE_TASK = "UPDATE_TASK";
 export const DELETE_TASK = "DELETE_TASK";
 export const COMPLETE_TASK = "COMPLETE_TASK";
 export const UNCOMPLETE_TASK = "UNCOMPLETE_TASK";
+
+// Notifications
+export const SHOW_NOTIFICATION = "SHOW_NOTIFICATION";
+export const HIDE_NOTIFICATION = "HIDE_NOTIFICATION";

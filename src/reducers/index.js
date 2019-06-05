@@ -9,19 +9,18 @@ function generateData(projectsCount, listsCount, tasksCount) {
   const projects = [];
   const lists = [];
   const tasks = [];
+  const notifications = [];
 
   for (let i = 1; i <= projectsCount; i++) {
     const project = {
-      // id: UUID.v4(),
-      id: i.toString(),
+      id: UUID.v4(),
       title: 'Project ' + i,
     };
     projects.push(project);
 
     for (let j = 1; j <= listsCount; j++) {
       const list = {
-        // id: UUID.v4(),
-        id: j.toString(),
+        id: UUID.v4(),
         title: 'Project ' + i + ' - List ' + j,
         projectId: project.id,
       }
@@ -29,8 +28,7 @@ function generateData(projectsCount, listsCount, tasksCount) {
 
       for (let k = 1; k <= tasksCount; k++) {
         tasks.push({
-          // id: UUID.v4(),
-          id: k.toString(),
+          id: UUID.v4(),
           title: 'Project ' + i + ' - List ' + j + ' - Task ' + k,
           listId: list.id,
           projectId: project.id,
@@ -46,6 +44,7 @@ function generateData(projectsCount, listsCount, tasksCount) {
     projects: projects,
     lists: lists,
     tasks: tasks,
+    notifications: notifications,
   }
 }
 
@@ -162,7 +161,21 @@ function rootReducer(state = initialState, action) {
 
       return {
         ...state,
-        tasks: state.tasks.filter(task => descendantIds.indexOf(task.id) < 0),
+        tasks: state.tasks.filter(task => descendantIds.indexOf(task.id) === -1),
+      };
+    }
+
+    case ACTION_TYPES.SHOW_NOTIFICATION: {
+      return {
+        ...state,
+        notifications: [ ...state.notifications, { ...action.payload }],
+      };
+    }
+
+    case ACTION_TYPES.HIDE_NOTIFICATION: {
+      return {
+        ...state,
+        notifications: state.notifications.filter((n) => n.id !== action.payload.id),
       };
     }
 
@@ -170,8 +183,6 @@ function rootReducer(state = initialState, action) {
       return state;
     }
   }
-
-  return state;
 }
 
 export default rootReducer;

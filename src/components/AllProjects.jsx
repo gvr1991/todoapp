@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { createProject, deleteProject } from '../actions/project';
-import TodoListContent from './TodoListContent';
+import { showNotificationWithTimeout } from '../actions/notification';
+import ConnectedTodoList from './TodoListContent';
 
 const mapStateToProps = (state) => {
   return {
@@ -16,6 +17,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     sendCreate: (project) => dispatch(createProject(project)),
     sendDelete: (project) => dispatch(deleteProject(project)),
+    sendNotification: (text) => dispatch(showNotificationWithTimeout(text)),
   }
 }
 
@@ -25,18 +27,23 @@ class ConnectedProjects extends React.Component {
       return;
     }
 
-    const { sendCreate } = this.props;
+    const { sendCreate, sendNotification } = this.props;
 
     sendCreate({
       id: UUID.v4(),
       title,
     });
+
+    sendNotification("Project \"" + title + "\" created successfully.");
   }
 
   handleDelete = (id) => {
-    const { sendDelete } = this.props;
+    const { projects, sendDelete, sendNotification } = this.props;
+    const project = projects.find(project => project.id === id);
 
     sendDelete({ id });
+
+    sendNotification("Project \"" + project.title + "\" deleted successfully.");
   }
 
   render() {
@@ -65,7 +72,7 @@ class ConnectedProjects extends React.Component {
     </div>
     );
 
-    return <TodoListContent
+    return <ConnectedTodoList
       header={headerElement}
       leftSidebar={sidebarElement}
       contentTitle="All Projects"

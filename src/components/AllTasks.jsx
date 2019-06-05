@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { createTask, updateTask, completeTask, uncompleteTask, deleteTask } from '../actions/task';
-import TodoListContent from './TodoListContent';
+import ConnectedTodoList from './TodoListContent';
 import * as CONSTANTS from '../constants/index';
 import { orderTasks, getPreviousSibling, getNextSibling, getGrandParentId, getNewPosition } from '../utils/taskPageUtils';
 
@@ -48,7 +48,6 @@ class ConnectedTasks extends React.Component {
         position: getNewPosition(previousSibling.id, orderedTasks),
       });
 
-      // console.log(this.props.tasks.map( (task) => "id" + task.id + ":pos=" + task.position + ":parent=" + task.parentId));
       event.preventDefault();
     }
   }
@@ -71,7 +70,6 @@ class ConnectedTasks extends React.Component {
       position: getNewPosition(grandParentId, orderedTasks),
     });
 
-    // console.log(this.props.tasks.map( (task) => "id" + task.id + ":pos=" + task.position + ":parent=" + task.parentId));
     event.preventDefault();
   }
 
@@ -245,7 +243,7 @@ class ConnectedTasks extends React.Component {
       </div>
     );
 
-    return <TodoListContent
+    return <ConnectedTodoList
       header={headerElement}
       leftSidebar={sidebarElement}
       contentTitle={list.title}

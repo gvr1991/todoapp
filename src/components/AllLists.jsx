@@ -2,8 +2,9 @@ import React from 'react';
 import { default as UUID } from 'uuid';
 import { Link } from "react-router-dom";
 import { withRouter } from "react-router";
-import TodoListContent from './TodoListContent';
+import ConnectedTodoList from './TodoListContent';
 import { createList, deleteList } from '../actions/list';
+import { showNotificationWithTimeout } from '../actions/notification';
 import { connect } from "react-redux";
 
 const mapStateToProps = (state) => {
@@ -17,6 +18,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     sendCreate: (list) => dispatch(createList(list)),
     sendDelete: (list) => dispatch(deleteList(list)),
+    sendNotification: (text) => dispatch(showNotificationWithTimeout(text)),
   }
 }
 
@@ -26,17 +28,26 @@ class ConnectedLists extends React.Component {
       return;
     }
 
-    this.props.sendCreate({
+    const { projects, sendCreate, sendNotification } = this.props;
+    const project = projects.find(project => project.id === params['projectId']);
+
+    sendCreate({
       id: UUID.v4(),
       title,
       projectId: params['projectId'],
     });
+
+    sendNotification(title + " created successfully in project \"" + project.title + "\"");
   }
 
   handleDelete = (id) => {
-    const { sendDelete } = this.props;
+    const { lists, projects, sendDelete, sendNotification } = this.props;
+    const list = lists.find(list => list.id === id);
+    const project = projects.find(project => project.id === list.projectId);
 
     sendDelete({ id });
+
+    sendNotification(list.title + " deleted successfully from project \"" + project.title + "\"");
   }
 
   render() {
@@ -81,7 +92,7 @@ class ConnectedLists extends React.Component {
       </div>
     );
 
-    return <TodoListContent
+    return <ConnectedTodoList
       header={headerElement}
       leftSidebar={sidebarElement}
       contentTitle={project.title}
