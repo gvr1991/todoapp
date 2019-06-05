@@ -16,8 +16,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    sendCreate: (list) => dispatch(createList(list)),
-    sendDelete: (list) => dispatch(deleteList(list)),
+    sendCreate: (payload) => dispatch(createList(payload)),
+    sendDelete: (payload) => dispatch(deleteList(payload)),
     sendNotification: (text) => dispatch(showNotificationWithTimeout(text)),
   }
 }
@@ -46,7 +46,6 @@ class ConnectedLists extends React.Component {
     const project = projects.find(project => project.id === list.projectId);
 
     sendDelete({ id });
-
     sendNotification(list.title + " deleted successfully from project \"" + project.title + "\"");
   }
 
@@ -84,7 +83,7 @@ class ConnectedLists extends React.Component {
       </div>
     )) : null;
 
-    const headerElement = (
+    const breadCrumbs = (
       <div className="horizontally-aligned">
         <Link to={`/projects`} >
           {` All Projects `}
@@ -93,7 +92,7 @@ class ConnectedLists extends React.Component {
     );
 
     return <TodoListContent
-      header={headerElement}
+      breadCrumbs={breadCrumbs}
       leftSidebar={sidebarElement}
       contentTitle={project.title}
       onEnter={this.handleListCreate}

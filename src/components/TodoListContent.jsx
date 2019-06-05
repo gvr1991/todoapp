@@ -36,21 +36,26 @@ class TodoListContent extends React.Component {
   }
 
   render() {
-    const { header, leftSidebar, placeholder, contentTitle, listItems } = this.props;
+    const { breadCrumbs, leftSidebar, placeholder, contentTitle, listItems } = this.props;
     const { value } = this.state;
+
+    let sidebarElement = leftSidebar ?
+      <div id="left-sidebar">
+        {leftSidebar}
+        <br />
+      </div> : null;
+
+    let breadCrumbsEl = breadCrumbs ?
+      <div id="bread-crumbs">
+        {breadCrumbs}
+      </div> : null;
 
     const topDivision = (
       <div>
-        <div id="header">
-          {header}
-        </div>
-
         <div className="horizontally-aligned">
-          <div id="left-sidebar">
-            {leftSidebar}
-            <br />
-          </div>
+          {sidebarElement}
           <div id="content">
+            {breadCrumbsEl}
             <h1>{contentTitle}</h1>
 
             <input

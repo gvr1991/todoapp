@@ -16,6 +16,10 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 class Notifications extends React.Component {
+  handleDelete = (id) => {
+    this.props.sendHideNotification({ id })
+  }
+
   render() {
     const { notifications } = this.props;
 
@@ -23,6 +27,7 @@ class Notifications extends React.Component {
       { notifications.map( (n) =>
         <div className="notification" key={n.id} >
           {n.text}
+          <span onClick={this.handleDelete(n.id)}>x</span>
         </div>) }
     </div>;
   }

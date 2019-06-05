@@ -231,11 +231,13 @@ class ConnectedTasks extends React.Component {
       onDelete={this.handleDelete}
     />;
 
-    const headerElement = (
+    const breadCrumbs = (
       <div className='horizontally-aligned'>
         <Link to={`/projects`} >
           {` All Projects `}
         </Link>
+        <hr />
+        >
         <hr />
         <Link to={`/project/${list.projectId}/lists`}>
           {project.title}
@@ -244,7 +246,7 @@ class ConnectedTasks extends React.Component {
     );
 
     return <TodoListContent
-      header={headerElement}
+      breadCrumbs={breadCrumbs}
       leftSidebar={sidebarElement}
       contentTitle={list.title}
       onEnter={this.handleTaskCreate}

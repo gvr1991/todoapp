@@ -33,7 +33,7 @@ hr {
 
 div#left-sidebar {
   background: #ffffff;
-  font: 18px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font: 16px 'Helvetica Neue', Helvetica, Arial, sans-serif;
   padding: 20px;
   text-align: left;
   width: calc(24vw);
@@ -43,27 +43,28 @@ div#left-sidebar {
   border-radius: 5px 5px 5px 5px;
 }
 
-#header {
-  font: 18px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+#bread-crumbs {
+  font: 16px 'Helvetica Neue', Helvetica, Arial, sans-serif;
   line-height: 1.4em;
-  width: 100%;
+  width: 95%;
   margin: 0 auto;
-  background: #efefef;
+  background: #f0f0f0;
   padding: 20px;
   margin-bottom: 2px;
   box-shadow: rgba(0, 0, 0, 0.2) 0 2px 6px 0;
-  border-radius: 5px 5px 5px 5px;
-  overflow: hidden;
+}
+
+#bread-crumbs:hover {
+  background: #fefefe;
 }
 
 #content {
   width: 69%;
   height: auto;
-  position: absolute;
   margin: 5px 5px 5px 5px;
-  background: #fff;
-  padding: 20px;
-  margin-bottom: 20px;
+  background: #fefefe;
+  padding: 1%;
+  margin-bottom: 2%;
   border-radius: 5px 5px 5px 5px;
   overflow: hidden;
   box-shadow:
@@ -108,7 +109,16 @@ div#left-sidebar {
   background: rgba(4, 4, 4, 0.85);
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.95);
   color: #ffffff;
+}
 
+.notification > span {
+  color: #373737;
+  float: right;
+  cursor: pointer;
+}
+
+.notification > span:hover {
+  color: #f2f2f2;
 }
 
 @keyframes pulse {
@@ -150,7 +160,7 @@ div#left-sidebar {
   margin-left: 0px;
   margin-bottom: 2px;
   border: 0.1px solid #999999;
-  /* box-shadow: rgba(0, 0, 0.4, 50) 0.5px 1px 2px 0.5px inset; */
+  box-shadow: rgba(0, 0, 0.4, 50) 0.5px 1px 2px 0.5px inset;
 }
 
 #content input::-webkit-input-placeholder {
