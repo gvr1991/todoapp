@@ -1,5 +1,4 @@
 import React from 'react';
-import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { hideNotification } from '../actions/notification';
 import '../styles/styles.css';
@@ -30,4 +29,4 @@ class Notifications extends React.Component {
 }
 
 const ConnectedNotifications = connect(mapStateToProps, mapDispatchToProps)(Notifications);
-export default withRouter(ConnectedNotifications);
+export default ConnectedNotifications;

@@ -87,9 +87,9 @@ div#left-sidebar {
   font-family: Helvetica, sans-serif;
   min-width: 15%;
   position: absolute;
-  top: 15px;
+  top: 20px;
   width: 30%;
-  right: 25px;
+  right: 20px;
   z-index: 100;
 }
 
@@ -98,7 +98,7 @@ div#left-sidebar {
   opacity: 1;
   animation-duration: 1s;
   border-radius: 2px;
-  font-size: 15px;
+  font-size: 16px;
   min-height: 1em;
   overflow: hidden;
   padding: 15px 15px 15px;

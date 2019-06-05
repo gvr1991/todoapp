@@ -11,7 +11,6 @@ class TodoApp extends React.Component {
       <div>
         <Router>
           <ConnectedNotifications />
-
           <Route
             path="/projects"
             component={ () => <AllProjects /> }
