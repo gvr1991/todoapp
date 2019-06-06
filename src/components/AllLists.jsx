@@ -1,11 +1,11 @@
 import React from 'react';
 import { default as UUID } from 'uuid';
-import { Link } from "react-router-dom";
-import { withRouter } from "react-router";
+import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router';
 import TodoListContent from './TodoListContent';
 import { createList, deleteList } from '../actions/list';
 import { showNotificationWithTimeout } from '../actions/notification';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => {
   return {

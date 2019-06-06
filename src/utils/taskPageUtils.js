@@ -1,6 +1,6 @@
 import * as CONSTANTS from '../constants/index';
 
-function compare(taskA, taskB) {
+function compareByPos(taskA, taskB) {
   if (taskA.position < taskB.position) {
     return -1;
   }
@@ -17,7 +17,7 @@ export function orderTasks(parentId, resultList, tasks) {
     return resultList;
   }
 
-  theseTasks.sort(compare);
+  theseTasks.sort(compareByPos);
 
   for (const task of theseTasks) {
     resultList.push(task);
@@ -63,9 +63,9 @@ export function getGrandParentId(thisTask, orderedTasks) {
   return orderedTasks.find(task => task.id === parent.parentId).id;
 }
 
-export function getNewPosition(parentId, tasks) {
+export function getNewPositionForTask(parentId, tasks) {
   const siblings = tasks.filter(task => task.parentId === parentId);
-  siblings.sort(compare);
+  siblings.sort(compareByPos);
 
   if (siblings.length === 0) return 1;
   return siblings[siblings.length - 1].position + 1;

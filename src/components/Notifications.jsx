@@ -27,7 +27,7 @@ class Notifications extends React.Component {
       { notifications.map( (n) =>
         <div className="notification" key={n.id} >
           {n.text}
-          <span onClick={this.handleDelete(n.id)}>x</span>
+          <span onClick={(e) => this.handleDelete(n.id)}>x</span>
         </div>) }
     </div>;
   }

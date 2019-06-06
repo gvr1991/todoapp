@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { createTask, updateTask, completeTask, uncompleteTask, deleteTask } from '../actions/task';
 import TodoListContent from './TodoListContent';
 import * as CONSTANTS from '../constants/index';
-import { orderTasks, getPreviousSibling, getNextSibling, getGrandParentId, getNewPosition } from '../utils/taskPageUtils';
+import { orderTasks, getPreviousSibling, getNextSibling, getGrandParentId, getNewPositionForTask } from '../utils/taskPageUtils';
 
 const mapStateToProps = (state) => {
   return {
@@ -45,7 +45,7 @@ class ConnectedTasks extends React.Component {
       sendUpdate({
         id: thisTask.id,
         parentId: previousSibling.id,
-        position: getNewPosition(previousSibling.id, orderedTasks),
+        position: getNewPositionForTask(previousSibling.id, orderedTasks),
       });
 
       event.preventDefault();
@@ -67,7 +67,7 @@ class ConnectedTasks extends React.Component {
     sendUpdate({
       id: thisTask.id,
       parentId: grandParentId,
-      position: getNewPosition(grandParentId, orderedTasks),
+      position: getNewPositionForTask(grandParentId, orderedTasks),
     });
 
     event.preventDefault();
@@ -81,7 +81,7 @@ class ConnectedTasks extends React.Component {
     const { sendCreate, tasks } = this.props;
     const parentId = CONSTANTS.LIST_ROOT;
     const listTasks = tasks.filter( task => task.listId === params['listId']);
-    const position = getNewPosition(parentId, listTasks);
+    const position = getNewPositionForTask(parentId, listTasks);
 
     sendCreate({
       id: UUID.v4(),
@@ -131,7 +131,7 @@ class ConnectedTasks extends React.Component {
     }
   }
 
-  handleTaskShift = (id, up) => {
+  handleTaskShift = (event, id, up) => {
     let { tasks } = this.props;
     const thisTask = tasks.find(task => task.id === id);
 
@@ -166,12 +166,12 @@ class ConnectedTasks extends React.Component {
     });
   }
 
-  handleMoveUp = (id) => {
-    this.handleTaskShift(id, true);
+  handleMoveUp = (event, id) => {
+    this.handleTaskShift(event, id, true);
   }
 
-  handleMoveDown = (id) => {
-    this.handleTaskShift(id, false);
+  handleMoveDown = (event, id) => {
+    this.handleTaskShift(event, id, false);
   }
 
   handleKeyDown = (id, event) => {
@@ -189,11 +189,11 @@ class ConnectedTasks extends React.Component {
         this.handleIndentAndOutdent(id, event, true);
       }
       event.preventDefault();
-    } else if (event.altKey || event.shiftKey) {
+    } else if (event.altKey) {
       if (event.key === 'ArrowUp') {
-        this.handleMoveUp(id);
+        this.handleMoveUp(event, id);
       } else if (event.key === 'ArrowDown') {
-        this.handleMoveDown(id);
+        this.handleMoveDown(event, id);
       }
     }
   }
@@ -269,7 +269,7 @@ class OrderedTaskElements extends React.Component {
             name='toggle-completion'
             type='checkbox'
             checked={task.isCompleted}
-            onChange={() => onToggleCompletion(task.id, task.isCompleted)}
+            onChange={(event) => onToggleCompletion(task.id, task.isCompleted)}
           />
           <input
             name='title'

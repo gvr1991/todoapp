@@ -1,8 +1,8 @@
 import React from 'react';
 import { default as UUID } from 'uuid';
-import { Link } from "react-router-dom";
-import { withRouter } from "react-router";
-import { connect } from "react-redux";
+import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router';
+import { connect } from 'react-redux';
 import { createProject, deleteProject } from '../actions/project';
 import { showNotificationWithTimeout } from '../actions/notification';
 import TodoListContent from './TodoListContent';
