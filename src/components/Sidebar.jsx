@@ -6,7 +6,7 @@ class Sidebar extends React.Component {
 
     return (
       <div id="left-sidebar">
-        <h1>{ title }</h1>
+        <h1 id="heading">{ title }</h1>
         <br />
         { links }
       </div>

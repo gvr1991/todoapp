@@ -274,7 +274,7 @@ class OrderedTaskElements extends React.Component {
     const siblings = tasks.filter(task => task.parentId === parentId);
 
     const taskElements = siblings.length > 0 ? siblings.map( (task) =>
-      <li id='task' key={task.id}>
+      <li id='task-entry' key={task.id}>
         <div className='horizontally-aligned'>
           <input
             name='toggle-completion'

@@ -40,19 +40,18 @@ class TodoListContent extends React.Component {
 
     return <div id="content">
       { breadCrumbs ? breadCrumbs : null }
-      <h1>{contentTitle}</h1>
-      <br />
+      <h1 id="heading">{contentTitle}</h1>
       <input
         id="enter-title"
-        name="title"
         type="text"
         value={this.state.value}
         onChange={this.onChange}
         onKeyPress={this.handleCreate}
         placeholder={placeholder}
       />
-      <br />
-      {listItems}
+      <div id="overflow">
+        {listItems}
+      </div>
     </div>;
   }
 }
