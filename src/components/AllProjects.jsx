@@ -61,7 +61,7 @@ class ConnectedProjects extends React.Component {
     );
 
     return <TodoListContent
-      contentTitle="All Projects"
+      contentTitle="Projects"
       onEnter={this.handleProjectCreate}
       onDelete={this.handleProjectDelete}
       placeholder="Create projects as a todo-list"

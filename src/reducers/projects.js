@@ -1,6 +1,19 @@
 import * as ACTION_TYPES from '../constants/action-types';
 
-const initialState = []
+const initialState = [
+  {
+    id: "1",
+    title: "Project 1",
+  },
+  {
+    id: "2",
+    title: "Project 2",
+  },
+  {
+    id: "3",
+    title: "Project 3",
+  },
+];
 
 export function projectsReducer(state = initialState, action) {
   switch (action.type) {

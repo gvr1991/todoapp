@@ -47,6 +47,7 @@ class ConnectedTasks extends React.Component {
       sendUpdate({
         id: thisTask.id,
         parentId: previousSibling.id,
+        isCompleted: previousSibling.isCompleted,
         position: getNewPositionForTask(previousSibling.id, orderedTasks),
       });
 
@@ -283,6 +284,11 @@ class OrderedTaskElements extends React.Component {
             onChange={(event) => onToggleCompletion(task.id, task.isCompleted)}
           />
           <input
+            style={
+              task.isCompleted ? {
+                "text-decoration": "line-through"
+              } : null
+            }
             name='title'
             type='text'
             onChange={(event) => onChange(task.id, event.target.value)}
@@ -291,7 +297,7 @@ class OrderedTaskElements extends React.Component {
           />
           <button onClick={() => onDelete(task.id)} >X</button>
         </div>
-        <ul>
+        <ul id="subtasks">
         { this.renderTasks(task.id) }
         </ul>
       </li>) : null;

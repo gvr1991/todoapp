@@ -1,6 +1,61 @@
 import * as ACTION_TYPES from '../constants/action-types';
 
-const initialState = []
+const initialState = [
+  {
+    id: "1",
+    title: "1",
+    listId: "1",
+    projectId: "1",
+    isCompleted: false,
+    parentId: "root",
+    position: 1,
+  },
+  {
+    id: "2",
+    title: "11",
+    listId: "1",
+    projectId: "1",
+    isCompleted: false,
+    parentId: "1",
+    position: 1,
+  },
+  {
+    id: "3",
+    title: "111",
+    listId: "1",
+    projectId: "1",
+    isCompleted: false,
+    parentId: "11",
+    position: 1,
+  },
+  {
+    id: "4",
+    title: "2",
+    listId: "1",
+    projectId: "1",
+    isCompleted: false,
+    parentId: "root",
+    position: 2,
+  },
+  {
+    id: "5",
+    title: "3",
+    listId: "1",
+    projectId: "1",
+    isCompleted: false,
+    parentId: "root",
+    position: 3,
+  },
+  {
+    id: "6",
+    title: "12",
+    listId: "1",
+    projectId: "1",
+    isCompleted: false,
+    parentId: "1",
+    position: 2,
+  },
+]
 
 function updateTask(state, payload) {
   const tasks = state;
