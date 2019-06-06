@@ -6,6 +6,8 @@ import TodoListContent from './TodoListContent';
 import { createList, deleteList } from '../actions/list';
 import { showNotificationWithTimeout } from '../actions/notification';
 import { connect } from 'react-redux';
+import '../styles/styles.css';
+import Sidebar from './Sidebar';
 
 const mapStateToProps = (state) => {
   return {
@@ -56,22 +58,6 @@ class ConnectedLists extends React.Component {
     let listsInProject = lists ? lists.filter(list => list.projectId === projectId) : [];
     let linksToOtherProjects = projects.filter(project => project.id !== projectId);
 
-    linksToOtherProjects = linksToOtherProjects.length > 0 ? (linksToOtherProjects.map( (project) =>
-      <div key={project.id} >
-        <Link to={`/project/${project.id}/lists`} >
-          {project.title}
-        </Link>
-        <br />
-      </div>
-    )) : null;
-
-    const sidebarElement = (<div>
-      <h1>{"Other projects"}</h1>
-      <br />
-      {linksToOtherProjects}
-      <br />
-    </div>);
-
     listsInProject = listsInProject.length > 0 ? (listsInProject.map( (list) =>
       <div className="horizontally-aligned" key={list.id}>
         <li>
@@ -79,27 +65,50 @@ class ConnectedLists extends React.Component {
             {list.title}
           </Link>
         </li>
-        <button onClick={() => this.handleDelete(list.id)} >X</button>
+        <button onClick={(event) => this.handleDelete(list.id)} >x</button>
       </div>
     )) : null;
 
-    const breadCrumbs = (
-      <div className="horizontally-aligned">
-        <Link to={`/projects`} >
-          {` All Projects `}
+    linksToOtherProjects = linksToOtherProjects.map( (project) =>
+      <div key={project.id} >
+        <br />
+        <Link to={`/project/${project.id}/lists`} >
+          {project.title}
         </Link>
+        <br />
+        <br />
       </div>
     );
 
-    return <TodoListContent
-      breadCrumbs={breadCrumbs}
-      leftSidebar={sidebarElement}
-      contentTitle={project.title}
-      onEnter={this.handleListCreate}
-      placeholder="Create lists as a todo-list"
-      listItems={listsInProject}
-      urlParams={match.params}
-    />;
+    const breadCrumbs = (
+      <div id="bread-crumbs" className="horizontally-aligned">
+        <Link to={`/projects`} >
+          {` All Projects `}
+        </Link>
+        <hr />
+        >
+        <hr />
+        {project.title}
+        <hr />
+      </div>
+    );
+
+    return <div>
+      <div className="horizontally-aligned">
+        <Sidebar
+          title="Other projects"
+          links={linksToOtherProjects}
+        />
+        <TodoListContent
+          breadCrumbs={breadCrumbs}
+          contentTitle={project.title}
+          onEnter={this.handleListCreate}
+          placeholder='Create lists as a todo-list'
+          listItems={listsInProject}
+          urlParams={match.params}
+        />
+      </div>
+    </div>;
   }
 }
 

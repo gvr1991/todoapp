@@ -5,8 +5,10 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { createTask, updateTask, completeTask, uncompleteTask, deleteTask } from '../actions/task';
 import TodoListContent from './TodoListContent';
+import Sidebar from './Sidebar';
 import * as CONSTANTS from '../constants/index';
 import { orderTasks, getPreviousSibling, getNextSibling, getGrandParentId, getNewPositionForTask } from '../utils/taskPageUtils';
+import '../styles/styles.css';
 
 const mapStateToProps = (state) => {
   return {
@@ -122,7 +124,7 @@ class ConnectedTasks extends React.Component {
     let { tasks } = this.props;
     const thisTask = tasks.find(task => task.id === id);
     tasks = tasks.filter(task => task.listId === thisTask.listId);
-    tasks = orderTasks(CONSTANTS.LIST_ROOT, [], tasks)
+    tasks = orderTasks(CONSTANTS.LIST_ROOT, tasks)
 
     if (indent) {
       this.doIndent(thisTask, tasks, event);
@@ -140,7 +142,7 @@ class ConnectedTasks extends React.Component {
     }
 
     tasks = tasks.filter(task => task.listId === thisTask.listId);
-    tasks = orderTasks(CONSTANTS.LIST_ROOT, [], tasks);
+    tasks = orderTasks(CONSTANTS.LIST_ROOT, tasks);
     let sibling = null;
 
     if (up) {
@@ -202,29 +204,24 @@ class ConnectedTasks extends React.Component {
     const { match, projects, lists, tasks } = this.props;
     const listId = match.params['listId'];
     const projectId = match.params['projectId'];
-    let tasksInList = tasks ? tasks.filter(task => task.listId === listId) : [];
+    const tasksInList = tasks ? tasks.filter(task => task.listId === listId) : [];
     const list = lists.find(list => list.id === listId);
     const project = projects.find(project => project.id === projectId);
     let linksToOtherLists = lists.filter( list => list.projectId === projectId && list.id !== listId );
 
-    linksToOtherLists = linksToOtherLists.length > 0 ? (linksToOtherLists.map( (list) =>
+    linksToOtherLists = linksToOtherLists.map( (list) =>
       <div key={list.id}>
+        <br />
         <Link to={`/project/${projectId}/list/${list.id}/tasks`} >
           {list.title}
         </Link>
         <br />
+        <br />
       </div>
-    )) : null;
-
-    const sidebarElement = (<div>
-      <h1>{'Other lists in '}{project.title}</h1>
-      <br />
-      {linksToOtherLists}
-      <br />
-    </div>);
+    );
 
     const taskElements = <OrderedTaskElements
-      tasks={orderTasks(CONSTANTS.LIST_ROOT, [], tasksInList)}
+      tasks={orderTasks(CONSTANTS.LIST_ROOT, tasksInList)}
       onToggleCompletion={this.handleToggleCompletion}
       onChange={this.handleChange}
       onKeyDown={this.handleKeyDown}
@@ -232,7 +229,7 @@ class ConnectedTasks extends React.Component {
     />;
 
     const breadCrumbs = (
-      <div className='horizontally-aligned'>
+      <div id="bread-crumbs" className="horizontally-aligned">
         <Link to={`/projects`} >
           {` All Projects `}
         </Link>
@@ -242,18 +239,32 @@ class ConnectedTasks extends React.Component {
         <Link to={`/project/${list.projectId}/lists`}>
           {project.title}
         </Link>
+        <hr />
+        >
+        <hr />
+        {list.title}
+        <hr />
       </div>
     );
 
-    return <TodoListContent
-      breadCrumbs={breadCrumbs}
-      leftSidebar={sidebarElement}
-      contentTitle={list.title}
-      onEnter={this.handleTaskCreate}
-      placeholder='Create tasks as a todo-list'
-      listItems={taskElements}
-      urlParams={match.params}
-    />;
+    return (
+      <div>
+        <div className="horizontally-aligned">
+          <Sidebar
+            title={"Other lists in " + project.title}
+            links={linksToOtherLists}
+          />
+          <TodoListContent
+            breadCrumbs={breadCrumbs}
+            contentTitle={list.title}
+            onEnter={this.handleTaskCreate}
+            placeholder='Create tasks as a todo-list'
+            listItems={taskElements}
+            urlParams={match.params}
+          />
+        </div>
+      </div>
+    );
   }
 }
 

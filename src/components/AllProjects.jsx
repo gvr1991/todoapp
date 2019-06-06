@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { createProject, deleteProject } from '../actions/project';
 import { showNotificationWithTimeout } from '../actions/notification';
 import TodoListContent from './TodoListContent';
+import '../styles/styles.css';
 
 const mapStateToProps = (state) => {
   return {
@@ -48,16 +49,16 @@ class ConnectedProjects extends React.Component {
   render() {
     const { match, projects } = this.props;
 
-    const allProjects = projects ? (projects.map( (project) =>
+    const allProjects = projects.map( (project) =>
       <div className="horizontally-aligned" key={project.id}>
         <li>
           <Link to={`/project/${project.id}/lists`}>
             {project.title}
           </Link>
         </li>
-        <button onClick={() => this.handleDelete(project.id)} >X</button>
+        <button onClick={(event) => this.handleDelete(project.id)} >x</button>
       </div>
-    )) : null;
+    );
 
     return <TodoListContent
       contentTitle="All Projects"

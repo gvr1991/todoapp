@@ -25,7 +25,7 @@ function getSelfAndDescendantIds(id, tasks, resultList = []) {
   }
 
   for (const child of children) {
-    getSelfAndDescendantIds(child.id, resultList, tasks);
+    getSelfAndDescendantIds(child.id, tasks, resultList);
   }
 
   return resultList;

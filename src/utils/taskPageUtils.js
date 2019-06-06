@@ -10,7 +10,7 @@ function compareByPos(taskA, taskB) {
   return 0;
 }
 
-export function orderTasks(parentId, resultList, tasks) {
+export function orderTasks(parentId, tasks, resultList = []) {
   const theseTasks = tasks.filter(task => task.parentId === parentId);
 
   if (theseTasks.length === 0) {
@@ -21,7 +21,7 @@ export function orderTasks(parentId, resultList, tasks) {
 
   for (const task of theseTasks) {
     resultList.push(task);
-    orderTasks(task.id, resultList, tasks);
+    orderTasks(task.id, tasks, resultList);
   }
 
   return resultList;
