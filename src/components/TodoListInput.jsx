@@ -22,7 +22,7 @@ class TodoListInput extends React.Component {
     }
   }
 
-  onChange = (event) => {
+  handleChange = (event) => {
     this.setState({
       value: event.target.value,
     });
@@ -34,9 +34,13 @@ class TodoListInput extends React.Component {
 
     return (
       <input
-        style={{ "margin-left": "10px" }}
+        style={
+          {
+            marginLeft: "10px"
+          }
+        }
         type="text"
-        onChange={this.onChange}
+        onChange={this.handleChange}
         onKeyPress={this.handleKeyPress}
         placeholder={placeholder}
         value={value} />

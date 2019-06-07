@@ -1,14 +1,15 @@
 import React from 'react';
 import { default as UUID } from 'uuid';
-import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 
-import TodoListContent from '../TodoListContent';
-import TodoListInput from '../TodoListInput';
-import Sidebar from '../Sidebar';
-import OrderedTasks from './OrderedTasks';
 import * as CONSTANTS from '../../constants/index';
+import MainPageLayout from '../layout/MainPageLayout';
+import TaskSidebar from './TaskSidebar';
+import TaskBreadCrumbs from './TaskBreadCrumbs';
+import TodoListInput from '../TodoListInput';
+import TodoListContent from '../TodoListContent';
+import OrderedTasks from './OrderedTasks';
 
 import {
   createTask,
@@ -101,17 +102,15 @@ class ConnectedTasks extends React.Component {
     }
 
     const { sendCreate, tasks } = this.props;
-    const parentId = CONSTANTS.LIST_ROOT;
-    const listTasks = tasks.filter( task => task.listId === params['listId']);
-    const position = getNewPositionForTask(parentId, listTasks);
+    const listTasks = tasks.filter( task => task.listId === params.listId);
 
     sendCreate({
       id: UUID.v4(),
       title,
-      listId: params['listId'],
-      projectId: params['projectId'],
-      parentId: parentId,
-      position: position,
+      listId: params.listId,
+      projectId: params.projectId,
+      parentId: CONSTANTS.LIST_ROOT,
+      position: getNewPositionForTask(CONSTANTS.LIST_ROOT, listTasks),
     });
   }
 
@@ -222,50 +221,14 @@ class ConnectedTasks extends React.Component {
 
   render() {
     const { match, projects, lists, tasks } = this.props;
-    const listId = match.params['listId'];
-    const projectId = match.params['projectId'];
-    const tasksInList = tasks ? tasks.filter(task => task.listId === listId) : [];
+    const listId = match.params.listId;
+    const projectId = match.params.projectId;
+    const tasksInList = tasks.filter(task => task.listId === listId);
     const list = lists.find(list => list.id === listId);
     const project = projects.find(project => project.id === projectId);
-    let linksToOtherLists = lists.filter( list => list.projectId === projectId && list.id !== listId );
-
-    linksToOtherLists = linksToOtherLists.map( (list) =>
-      <div key={list.id}>
-        <br />
-        <Link to={`/project/${projectId}/list/${list.id}/tasks`} >
-          {list.title}
-        </Link>
-        <br />
-        <br />
-      </div>
-    );
-
-    const taskElements = (
-      <OrderedTasks
-        tasks={orderTasks(CONSTANTS.LIST_ROOT, tasksInList)}
-        onToggleCompletion={this.handleToggleCompletion}
-        onChange={this.handleChange}
-        onKeyDown={this.handleKeyDown}
-        onDelete={this.handleDelete} />
-    );
 
     const breadCrumbs = (
-      <div id="bread-crumbs" className="horizontally-aligned">
-        <Link to={`/projects`} >
-          {`Projects`}
-        </Link>
-        <hr />
-        >
-        <hr />
-        <Link to={`/project/${list.projectId}/lists`}>
-          {project.title}
-        </Link>
-        <hr />
-        >
-        <hr />
-        {list.title}
-        <hr />
-      </div>
+      <TaskBreadCrumbs project={project} list={list} />
     );
 
     const todoListInput = (
@@ -275,17 +238,25 @@ class ConnectedTasks extends React.Component {
         urlParams={match.params} />
     );
 
+    const collection = (
+      <OrderedTasks
+        tasks={orderTasks(CONSTANTS.LIST_ROOT, tasksInList)}
+        onToggleCompletion={this.handleToggleCompletion}
+        onChange={this.handleChange}
+        onKeyDown={this.handleKeyDown}
+        onDelete={this.handleDelete} />
+    );
+
     return (
-      <div className="horizontally-aligned">
-        <Sidebar
-          title={"Other lists in " + project.title}
-          links={linksToOtherLists} />
+      <MainPageLayout>
+        <TaskSidebar title={project.title} urlParams={match.params} />
+
         <TodoListContent
           breadCrumbs={breadCrumbs}
           title={list.title}
           input={todoListInput}
-          collection={taskElements} />
-      </div>
+          collection={collection} />
+      </MainPageLayout>
     );
   }
 }

@@ -4,15 +4,12 @@ import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 
-import {
-  createProject,
-  deleteProject
-} from '../../actions/project';
-
+import { createProject, deleteProject } from '../../actions/project';
 import { showNotificationWithTimeout } from '../../actions/notification';
+
+import MainPageLayout from '../layout/MainPageLayout';
 import TodoListContent from '../TodoListContent';
 import TodoListInput from '../TodoListInput';
-import '../../styles/styles.css';
 
 const mapStateToProps = (state) => {
   return {
@@ -55,7 +52,7 @@ class ConnectedProjects extends React.Component {
   render() {
     const { match, projects } = this.props;
 
-    const ProjectsPage = projects.map( (project) =>
+    const collection = projects.map( (project) =>
       <div className="horizontally-aligned" key={project.id}>
         <li>
           <Link to={`/project/${project.id}/lists`}>
@@ -78,14 +75,16 @@ class ConnectedProjects extends React.Component {
     );
 
     return (
-      <div className="horizontally-aligned">
+      <MainPageLayout>
         { realEstate }
+
         <TodoListContent
           title="Projects"
           input={todoListInput}
-          collection={ProjectsPage} />
+          collection={collection} />
+
         { realEstate }
-      </div>
+      </MainPageLayout>
     );
   }
 }

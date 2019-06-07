@@ -1,15 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-class LinkToProject extends React.Component {
+class LinkToList extends React.Component {
   render() {
-    const { project } = this.props;
+    const { list } = this.props;
 
     return (
       <React.Fragment>
         <br />
-        <Link to={`/project/${project.id}/lists`} >
-          {project.title}
+        <Link to={`/project/${list.projectId}/list/${list.id}/tasks`} >
+          {list.title}
         </Link>
         <br />
       </React.Fragment>
@@ -17,4 +17,4 @@ class LinkToProject extends React.Component {
   }
 }
 
-export default LinkToProject;
+export default LinkToList;
