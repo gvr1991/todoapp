@@ -19,7 +19,9 @@ class OrderedTasks extends React.Component {
           <input
             style={
               task.isCompleted ? {
-                textDecoration: "line-through"
+                textDecoration: "line-through",
+                backgroundColor: "#777777",
+                opacity: 0.9,
               } : null
             }
             id='task-title'

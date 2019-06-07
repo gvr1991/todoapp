@@ -59,7 +59,7 @@ class ConnectedProjects extends React.Component {
             {project.title}
           </Link>
         </li>
-        <button onClick={(event) => this.handleDelete(project.id)} >x</button>
+        <button onClick={(event) => this.handleDelete(project.id)} >X</button>
       </div>
     );
 

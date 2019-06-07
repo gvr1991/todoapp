@@ -77,7 +77,7 @@ class ConnectedLists extends React.Component {
             {list.title}
           </Link>
         </li>
-        <button onClick={(event) => this.handleDelete(list.id)} >x</button>
+        <button onClick={(event) => this.handleDelete(list.id)} >X</button>
       </div>
     );
 

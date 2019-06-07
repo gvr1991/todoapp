@@ -7,8 +7,8 @@ class TodoListContent extends React.Component {
 
     return (
       <div id="content">
-        { breadCrumbs ? breadCrumbs : null }
-        <h1 id="heading">{title}</h1>
+        { breadCrumbs }
+        <h1 id="heading">{ title }</h1>
         { input }
         <div id="overflow">
           { collection }
