@@ -3,10 +3,16 @@ import { default as UUID } from 'uuid';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import { createProject, deleteProject } from '../actions/project';
-import { showNotificationWithTimeout } from '../actions/notification';
-import TodoListContent from './TodoListContent';
-import '../styles/styles.css';
+
+import {
+  createProject,
+  deleteProject
+} from '../../actions/project';
+
+import { showNotificationWithTimeout } from '../../actions/notification';
+import TodoListContent from '../TodoListContent';
+import TodoListInput from '../TodoListInput';
+import '../../styles/styles.css';
 
 const mapStateToProps = (state) => {
   return {
@@ -49,7 +55,7 @@ class ConnectedProjects extends React.Component {
   render() {
     const { match, projects } = this.props;
 
-    const allProjects = projects.map( (project) =>
+    const ProjectsPage = projects.map( (project) =>
       <div className="horizontally-aligned" key={project.id}>
         <li>
           <Link to={`/project/${project.id}/lists`}>
@@ -60,16 +66,29 @@ class ConnectedProjects extends React.Component {
       </div>
     );
 
-    return <TodoListContent
-      contentTitle="Projects"
-      onEnter={this.handleProjectCreate}
-      onDelete={this.handleProjectDelete}
-      placeholder="Create projects as a todo-list"
-      listItems={allProjects}
-      urlParams={match.params}
-    />;
+    const realEstate = (
+      <div style={{ width: "13%" }} />
+    );
+
+    const todoListInput = (
+      <TodoListInput
+        onEnter={this.handleProjectCreate}
+        placeholder={"Create projects as a todo-list"}
+        urlParams={match.params} />
+    );
+
+    return (
+      <div className="horizontally-aligned">
+        { realEstate }
+        <TodoListContent
+          title="Projects"
+          input={todoListInput}
+          collection={ProjectsPage} />
+        { realEstate }
+      </div>
+    );
   }
 }
 
-const AllProjects = connect(mapStateToProps, mapDispatchToProps)(ConnectedProjects);
-export default withRouter(AllProjects);
+const ProjectsPage = connect(mapStateToProps, mapDispatchToProps)(ConnectedProjects);
+export default withRouter(ProjectsPage);

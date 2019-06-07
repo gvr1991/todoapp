@@ -3,12 +3,30 @@ import { default as UUID } from 'uuid';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import { createTask, updateTask, completeTask, uncompleteTask, deleteTask } from '../actions/task';
-import TodoListContent from './TodoListContent';
-import Sidebar from './Sidebar';
-import * as CONSTANTS from '../constants/index';
-import { orderTasks, getPreviousSibling, getNextSibling, getGrandParentId, getNewPositionForTask } from '../utils/taskPageUtils';
-import '../styles/styles.css';
+
+import TodoListContent from '../TodoListContent';
+import TodoListInput from '../TodoListInput';
+import Sidebar from '../Sidebar';
+import OrderedTasks from './OrderedTasks';
+import * as CONSTANTS from '../../constants/index';
+
+import {
+  createTask,
+  updateTask,
+  completeTask,
+  uncompleteTask,
+  deleteTask
+} from '../../actions/task';
+
+import {
+  orderTasks,
+  getPreviousSibling,
+  getNextSibling,
+  getGrandParentId,
+  getNewPositionForTask
+} from '../../utils/taskPageUtils';
+
+import '../../styles/styles.css';
 
 const mapStateToProps = (state) => {
   return {
@@ -61,6 +79,7 @@ class ConnectedTasks extends React.Component {
     }
 
     const grandParentId = getGrandParentId(thisTask, orderedTasks);
+
     if (!grandParentId) {
       return;
     }
@@ -221,18 +240,19 @@ class ConnectedTasks extends React.Component {
       </div>
     );
 
-    const taskElements = <OrderedTaskElements
-      tasks={orderTasks(CONSTANTS.LIST_ROOT, tasksInList)}
-      onToggleCompletion={this.handleToggleCompletion}
-      onChange={this.handleChange}
-      onKeyDown={this.handleKeyDown}
-      onDelete={this.handleDelete}
-    />;
+    const taskElements = (
+      <OrderedTasks
+        tasks={orderTasks(CONSTANTS.LIST_ROOT, tasksInList)}
+        onToggleCompletion={this.handleToggleCompletion}
+        onChange={this.handleChange}
+        onKeyDown={this.handleKeyDown}
+        onDelete={this.handleDelete} />
+    );
 
     const breadCrumbs = (
       <div id="bread-crumbs" className="horizontally-aligned">
         <Link to={`/projects`} >
-          {` All Projects `}
+          {`Projects`}
         </Link>
         <hr />
         >
@@ -248,67 +268,27 @@ class ConnectedTasks extends React.Component {
       </div>
     );
 
+    const todoListInput = (
+      <TodoListInput
+        onEnter={this.handleTaskCreate}
+        placeholder='Create tasks as a todo-list'
+        urlParams={match.params} />
+    );
+
     return (
-      <div>
-        <div className="horizontally-aligned">
-          <Sidebar
-            title={"Other lists in " + project.title}
-            links={linksToOtherLists}
-          />
-          <TodoListContent
-            breadCrumbs={breadCrumbs}
-            contentTitle={list.title}
-            onEnter={this.handleTaskCreate}
-            placeholder='Create tasks as a todo-list'
-            listItems={taskElements}
-            urlParams={match.params}
-          />
-        </div>
+      <div className="horizontally-aligned">
+        <Sidebar
+          title={"Other lists in " + project.title}
+          links={linksToOtherLists} />
+        <TodoListContent
+          breadCrumbs={breadCrumbs}
+          title={list.title}
+          input={todoListInput}
+          collection={taskElements} />
       </div>
     );
   }
 }
 
-class OrderedTaskElements extends React.Component {
-  renderTasks(parentId) {
-    const { tasks, onToggleCompletion, onChange, onKeyDown, onDelete } = this.props;
-    const siblings = tasks.filter(task => task.parentId === parentId);
-
-    const taskElements = siblings.length > 0 ? siblings.map( (task) =>
-      <li id='task-entry' key={task.id}>
-        <div className='horizontally-aligned'>
-          <input
-            name='toggle-completion'
-            type='checkbox'
-            checked={task.isCompleted}
-            onChange={(event) => onToggleCompletion(task.id, task.isCompleted)}
-          />
-          <input
-            style={
-              task.isCompleted ? {
-                "text-decoration": "line-through"
-              } : null
-            }
-            name='title'
-            type='text'
-            onChange={(event) => onChange(task.id, event.target.value)}
-            onKeyDown={(event) => onKeyDown(task.id, event)}
-            value={task.title}
-          />
-          <button onClick={() => onDelete(task.id)} >X</button>
-        </div>
-        <ul id="subtasks">
-        { this.renderTasks(task.id) }
-        </ul>
-      </li>) : null;
-
-    return taskElements;
-  }
-
-  render() {
-    return this.renderTasks(CONSTANTS.LIST_ROOT);
-  }
-}
-
-const AllTasks = connect(mapStateToProps, mapDispatchToProps)(ConnectedTasks);
-export default withRouter(AllTasks);
+const TasksPage = connect(mapStateToProps, mapDispatchToProps)(ConnectedTasks);
+export default withRouter(TasksPage);

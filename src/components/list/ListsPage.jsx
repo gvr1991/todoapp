@@ -2,12 +2,15 @@ import React from 'react';
 import { default as UUID } from 'uuid';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
-import TodoListContent from './TodoListContent';
-import { createList, deleteList } from '../actions/list';
-import { showNotificationWithTimeout } from '../actions/notification';
 import { connect } from 'react-redux';
-import '../styles/styles.css';
-import Sidebar from './Sidebar';
+
+import TodoListContent from '../TodoListContent';
+import TodoListInput from '../TodoListInput';
+import LinkToProject from './LinkToProject';
+import { createList, deleteList } from '../../actions/list';
+import { showNotificationWithTimeout } from '../../actions/notification';
+import Sidebar from '../Sidebar';
+import '../../styles/styles.css';
 
 const mapStateToProps = (state) => {
   return {
@@ -71,19 +74,14 @@ class ConnectedLists extends React.Component {
 
     linksToOtherProjects = linksToOtherProjects.map( (project) =>
       <div key={project.id} >
-        <br />
-        <Link to={`/project/${project.id}/lists`} >
-          {project.title}
-        </Link>
-        <br />
-        <br />
+        <LinkToProject project={project} />
       </div>
     );
 
     const breadCrumbs = (
       <div id="bread-crumbs" className="horizontally-aligned">
         <Link to={`/projects`} >
-          {` All Projects `}
+          {`Projects`}
         </Link>
         <hr />
         >
@@ -93,24 +91,27 @@ class ConnectedLists extends React.Component {
       </div>
     );
 
-    return <div>
+    const todoListInput = (
+      <TodoListInput
+        onEnter={this.handleListCreate}
+        placeholder='Create lists as a todo-list'
+        urlParams={match.params} />
+    );
+
+    return (
       <div className="horizontally-aligned">
         <Sidebar
           title="Other projects"
-          links={linksToOtherProjects}
-        />
+          links={linksToOtherProjects} />
         <TodoListContent
           breadCrumbs={breadCrumbs}
-          contentTitle={project.title}
-          onEnter={this.handleListCreate}
-          placeholder='Create lists as a todo-list'
-          listItems={listsInProject}
-          urlParams={match.params}
-        />
+          title={project.title}
+          input={todoListInput}
+          collection={listsInProject} />
       </div>
-    </div>;
+    );
   }
 }
 
-const AllLists = connect(mapStateToProps, mapDispatchToProps)(ConnectedLists);
-export default withRouter(AllLists);
+const ListsPage = connect(mapStateToProps, mapDispatchToProps)(ConnectedLists);
+export default withRouter(ListsPage);

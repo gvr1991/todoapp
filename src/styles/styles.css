@@ -140,10 +140,6 @@ h1#heading {
   overflow: auto;
 }
 
-#enter-title {
-  margin-left: 10px;
-}
-
 #content input[type="text"] {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

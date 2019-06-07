@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import AllProjects from './AllProjects';
-import AllLists from './AllLists';
-import AllTasks from './AllTasks';
+import ProjectsPage from './project/ProjectsPage';
+import ListsPage from './list/ListsPage';
+import TasksPage from './task/TasksPage';
 import ConnectedNotifications from './Notifications';
 
 class TodoApp extends React.Component {
@@ -13,16 +13,13 @@ class TodoApp extends React.Component {
           <ConnectedNotifications />
           <Route
             path="/projects"
-            component={ () => <AllProjects /> }
-          />
+            component={ () => <ProjectsPage /> } />
           <Route
             path="/project/:projectId/lists"
-            component={ () => <AllLists /> }
-          />
+            component={ () => <ListsPage /> } />
           <Route
             path="/project/:projectId/list/:listId/tasks"
-            component={ () => <AllTasks /> }
-          />
+            component={ () => <TasksPage /> } />
         </Router>
       </div>
     );

@@ -2,13 +2,13 @@ import React from 'react';
 
 class Sidebar extends React.Component {
   render() {
-    const { links, title } = this.props;
+    const { title, children } = this.props;
 
     return (
       <div id="left-sidebar">
         <h1 id="heading">{ title }</h1>
         <br />
-        { links }
+        { children }
       </div>
     );
   }
