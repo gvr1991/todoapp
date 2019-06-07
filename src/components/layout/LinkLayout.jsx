@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-class AbstractLink extends React.Component {
+class LinkLayout extends React.Component {
   render() {
     const { linkTo, linkText } = this.props;
 
@@ -17,4 +17,4 @@ class AbstractLink extends React.Component {
   }
 }
 
-export default AbstractLink;
+export default LinkLayout;

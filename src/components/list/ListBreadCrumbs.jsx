@@ -1,6 +1,6 @@
 import React from 'react';
 import BreadCrumbsLayout from '../layout/BreadCrumbsLayout';
-import AbstractLink from '../layout/AbstractLink';
+import LinkLayout from '../layout/LinkLayout';
 
 class ListBreadCrumbs extends React.Component {
   render() {
@@ -8,7 +8,7 @@ class ListBreadCrumbs extends React.Component {
 
     return (
       <BreadCrumbsLayout>
-        <AbstractLink
+        <LinkLayout
           linkTo={`/projects`}
           linkText={"Projects"} />
         >
