@@ -1,21 +1,30 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import '../styles/styles.css';
 
-class TodoListContent extends React.Component {
-  render() {
-    const { breadCrumbs, title, input, collection } = this.props;
+export default function TodoListContent(props) {
+  const {
+    breadCrumbs,
+    title,
+    input,
+    collection,
+  } = props;
 
-    return (
-      <div id="content">
-        { breadCrumbs }
-        <h1 id="heading">{ title }</h1>
-        { input }
-        <div id="overflow">
-          { collection }
-        </div>
+  return (
+    <div id="content">
+      { breadCrumbs }
+      <h1 id="heading">{ title }</h1>
+      { input }
+      <div id="overflow">
+        { collection }
       </div>
-    );
-  }
+    </div>
+  );
 }
 
-export default TodoListContent;
+TodoListContent.propTypes = {
+  breadCrumbs: PropTypes.node.isRequired,
+  title: PropTypes.node.isRequired,
+  input: PropTypes.node.isRequired,
+  collection: PropTypes.node.isRequired,
+};

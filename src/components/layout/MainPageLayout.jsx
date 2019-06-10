@@ -1,16 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import '../../styles/styles.css';
 
-class MainPageLayout extends React.Component {
-  render() {
-    const { children } = this.props;
+export default function MainPageLayout(props) {
+  const { children } = props;
 
-    return (
-      <div className="horizontally-aligned">
-        { children }
-      </div>
-    );
-  }
+  return (
+    <div className="horizontally-aligned">
+      { children }
+    </div>
+  );
 }
 
-export default MainPageLayout;
+MainPageLayout.propTypes = {
+  children: PropTypes.instanceOf.isRequired,
+};

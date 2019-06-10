@@ -1,9 +1,10 @@
 import React from 'react';
-import { default as UUID } from 'uuid';
+import UUID from 'uuid';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-import * as CONSTANTS from '../../constants/index';
+import LIST_ROOT from '../../constants/index';
 import MainPageLayout from '../layout/MainPageLayout';
 import TaskSidebar from './TaskSidebar';
 import TaskBreadCrumbs from './TaskBreadCrumbs';
@@ -16,7 +17,7 @@ import {
   updateTask,
   completeTask,
   uncompleteTask,
-  deleteTask
+  deleteTask,
 } from '../../actions/task';
 
 import {
@@ -24,103 +25,75 @@ import {
   getPreviousSibling,
   getNextSibling,
   getGrandParentId,
-  getNewPositionForTask
+  getNewPositionForTask,
 } from '../../utils/taskPageUtils';
 
 import '../../styles/styles.css';
 
-const mapStateToProps = (state) => {
-  return {
-    projects: state.projects,
-    lists: state.lists,
-    tasks: state.tasks,
-  };
-};
+const mapStateToProps = state => ({
+  projects: state.projects,
+  lists: state.lists,
+  tasks: state.tasks,
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    sendCreate: (payload) => dispatch(createTask(payload)),
-    sendUpdate: (payload) => dispatch(updateTask(payload)),
-    sendComplete: (payload) => dispatch(completeTask(payload)),
-    sendUncomplete: (payload) => dispatch(uncompleteTask(payload)),
-    sendDelete: (payload) => dispatch(deleteTask(payload)),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  sendCreate: payload => dispatch(createTask(payload)),
+  sendUpdate: payload => dispatch(updateTask(payload)),
+  sendComplete: payload => dispatch(completeTask(payload)),
+  sendUncomplete: payload => dispatch(uncompleteTask(payload)),
+  sendDelete: payload => dispatch(deleteTask(payload)),
+});
 
 class ConnectedTasks extends React.Component {
-  doIndent(thisTask, orderedTasks, event) {
-    const index = orderedTasks.indexOf(thisTask);
+  static propTypes = {
+    lists: PropTypes.node.isRequired,
+    tasks: PropTypes.node.isRequired,
+    projects: PropTypes.node.isRequired,
+    match: PropTypes.symbol.isRequired,
 
-    if (index === 0 || index === -1) {
-      return;
-    }
-
-    const previousSibling = getPreviousSibling(thisTask, orderedTasks);
-    if (previousSibling == null) {
-      return;
-    }
-
-    if (thisTask.parentId !== previousSibling.id) {
-      const { sendUpdate } = this.props;
-
-      sendUpdate({
-        id: thisTask.id,
-        parentId: previousSibling.id,
-        isCompleted: previousSibling.isCompleted,
-        position: getNewPositionForTask(previousSibling.id, orderedTasks),
-      });
-
-      event.preventDefault();
-    }
-  }
-
-  doOutdent(thisTask, orderedTasks, event) {
-    if (thisTask.parentId === CONSTANTS.LIST_ROOT) {
-      return;
-    }
-
-    const grandParentId = getGrandParentId(thisTask, orderedTasks);
-
-    if (!grandParentId) {
-      return;
-    }
-
-    const { sendUpdate } = this.props;
-
-    sendUpdate({
-      id: thisTask.id,
-      parentId: grandParentId,
-      position: getNewPositionForTask(grandParentId, orderedTasks),
-    });
-
-    event.preventDefault();
-  }
+    sendCreate: PropTypes.func.isRequired,
+    sendUpdate: PropTypes.func.isRequired,
+    sendComplete: PropTypes.func.isRequired,
+    sendUncomplete: PropTypes.func.isRequired,
+    sendDelete: PropTypes.func.isRequired,
+  };
 
   handleTaskCreate = (params, title) => {
     if (title === '') {
       return;
     }
 
-    const { sendCreate, tasks } = this.props;
-    const listTasks = tasks.filter( task => task.listId === params.listId);
+    const {
+      sendCreate,
+      tasks,
+    } = this.props;
+
+    const listTasks = tasks.filter(task => task.listId === params.listId);
 
     sendCreate({
       id: UUID.v4(),
       title,
       listId: params.listId,
       projectId: params.projectId,
-      parentId: CONSTANTS.LIST_ROOT,
-      position: getNewPositionForTask(CONSTANTS.LIST_ROOT, listTasks),
+      parentId: LIST_ROOT,
+      position: getNewPositionForTask(LIST_ROOT, listTasks),
     });
   }
 
   handleToggleCompletion = (id, isCompleted) => {
-    const { sendComplete, sendUncomplete } = this.props;
+    const {
+      sendComplete,
+      sendUncomplete,
+    } = this.props;
 
     if (isCompleted) {
-      sendUncomplete({ id })
+      sendUncomplete({
+        id,
+      });
     } else {
-      sendComplete({ id })
+      sendComplete({
+        id,
+      });
     }
   }
 
@@ -136,14 +109,16 @@ class ConnectedTasks extends React.Component {
   handleDelete = (id) => {
     const { sendDelete } = this.props;
 
-    sendDelete({ id });
+    sendDelete({
+      id,
+    });
   }
 
-  handleIndentAndOutdent = (id, event, indent=true) => {
+  handleIndentAndOutdent = (id, event, indent = true) => {
     let { tasks } = this.props;
     const thisTask = tasks.find(task => task.id === id);
     tasks = tasks.filter(task => task.listId === thisTask.listId);
-    tasks = orderTasks(CONSTANTS.LIST_ROOT, tasks)
+    tasks = orderTasks(LIST_ROOT, tasks);
 
     if (indent) {
       this.doIndent(thisTask, tasks, event);
@@ -161,7 +136,7 @@ class ConnectedTasks extends React.Component {
     }
 
     tasks = tasks.filter(task => task.listId === thisTask.listId);
-    tasks = orderTasks(CONSTANTS.LIST_ROOT, tasks);
+    tasks = orderTasks(LIST_ROOT, tasks);
     let sibling = null;
 
     if (up) {
@@ -197,7 +172,7 @@ class ConnectedTasks extends React.Component {
 
   handleKeyDown = (id, event) => {
     const { tasks } = this.props;
-    const task = tasks.find(task => task.id === id);
+    const task = tasks.find(t => t.id === id);
 
     if (event.key === 'Backspace') {
       if (task.title === '') {
@@ -219,13 +194,67 @@ class ConnectedTasks extends React.Component {
     }
   }
 
+  doIndent(thisTask, orderedTasks, event) {
+    const index = orderedTasks.indexOf(thisTask);
+
+    if (index === 0 || index === -1) {
+      return;
+    }
+
+    const previousSibling = getPreviousSibling(thisTask, orderedTasks);
+    if (previousSibling == null) {
+      return;
+    }
+
+    if (thisTask.parentId !== previousSibling.id) {
+      const { sendUpdate } = this.props;
+
+      sendUpdate({
+        id: thisTask.id,
+        parentId: previousSibling.id,
+        isCompleted: previousSibling.isCompleted,
+        position: getNewPositionForTask(previousSibling.id, orderedTasks),
+      });
+
+      event.preventDefault();
+    }
+  }
+
+  doOutdent(thisTask, orderedTasks, event) {
+    if (thisTask.parentId === LIST_ROOT) {
+      return;
+    }
+
+    const grandParentId = getGrandParentId(thisTask, orderedTasks);
+
+    if (!grandParentId) {
+      return;
+    }
+
+    const { sendUpdate } = this.props;
+
+    sendUpdate({
+      id: thisTask.id,
+      parentId: grandParentId,
+      position: getNewPositionForTask(grandParentId, orderedTasks),
+    });
+
+    event.preventDefault();
+  }
+
   render() {
-    const { match, projects, lists, tasks } = this.props;
-    const listId = match.params.listId;
-    const projectId = match.params.projectId;
+    const {
+      match,
+      projects,
+      lists,
+      tasks,
+    } = this.props;
+
+    const { listId } = match.params;
+    const { projectId } = match.params;
     const tasksInList = tasks.filter(task => task.listId === listId);
-    const list = lists.find(list => list.id === listId);
-    const project = projects.find(project => project.id === projectId);
+    const list = lists.find(l => l.id === listId);
+    const project = projects.find(p => p.id === projectId);
 
     const breadCrumbs = (
       <TaskBreadCrumbs project={project} list={list} />
@@ -234,17 +263,19 @@ class ConnectedTasks extends React.Component {
     const todoListInput = (
       <TodoListInput
         onEnter={this.handleTaskCreate}
-        placeholder='Create tasks as a todo-list'
-        urlParams={match.params} />
+        placeholder="Create tasks as a todo-list"
+        urlParams={match.params}
+      />
     );
 
     const collection = (
       <OrderedTasks
-        tasks={orderTasks(CONSTANTS.LIST_ROOT, tasksInList)}
+        tasks={orderTasks(LIST_ROOT, tasksInList)}
         onToggleCompletion={this.handleToggleCompletion}
         onChange={this.handleChange}
         onKeyDown={this.handleKeyDown}
-        onDelete={this.handleDelete} />
+        onDelete={this.handleDelete}
+      />
     );
 
     return (
@@ -255,7 +286,8 @@ class ConnectedTasks extends React.Component {
           breadCrumbs={breadCrumbs}
           title={list.title}
           input={todoListInput}
-          collection={collection} />
+          collection={collection}
+        />
       </MainPageLayout>
     );
   }

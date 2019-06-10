@@ -2,64 +2,64 @@ import * as ACTION_TYPES from '../constants/action-types';
 
 const initialState = [
   {
-    id: "1",
-    title: "1",
-    listId: "1",
-    projectId: "1",
+    id: '1',
+    title: '1',
+    listId: '1',
+    projectId: '1',
     isCompleted: false,
-    parentId: "root",
+    parentId: 'root',
     position: 1,
   },
   {
-    id: "2",
-    title: "11",
-    listId: "1",
-    projectId: "1",
+    id: '2',
+    title: '11',
+    listId: '1',
+    projectId: '1',
     isCompleted: false,
-    parentId: "1",
+    parentId: '1',
     position: 1,
   },
   {
-    id: "3",
-    title: "111",
-    listId: "1",
-    projectId: "1",
+    id: '3',
+    title: '111',
+    listId: '1',
+    projectId: '1',
     isCompleted: false,
-    parentId: "11",
+    parentId: '11',
     position: 1,
   },
   {
-    id: "4",
-    title: "2",
-    listId: "1",
-    projectId: "1",
+    id: '4',
+    title: '2',
+    listId: '1',
+    projectId: '1',
     isCompleted: false,
-    parentId: "root",
+    parentId: 'root',
     position: 2,
   },
   {
-    id: "5",
-    title: "3",
-    listId: "1",
-    projectId: "1",
+    id: '5',
+    title: '3',
+    listId: '1',
+    projectId: '1',
     isCompleted: false,
-    parentId: "root",
+    parentId: 'root',
     position: 3,
   },
   {
-    id: "6",
-    title: "12",
-    listId: "1",
-    projectId: "1",
+    id: '6',
+    title: '12',
+    listId: '1',
+    projectId: '1',
     isCompleted: false,
-    parentId: "1",
+    parentId: '1',
     position: 2,
   },
-]
+];
 
 function updateTask(state, payload) {
   const tasks = state;
-  const task = tasks.find(task => task.id === payload.id);
+  const task = tasks.find(t => t.id === payload.id);
 
   const updatedTask = {
     ...task,
@@ -68,7 +68,7 @@ function updateTask(state, payload) {
 
   tasks[tasks.indexOf(task)] = updatedTask;
 
-  return [ ...tasks ];
+  return [...tasks];
 }
 
 function getSelfAndDescendantIds(id, tasks, resultList = []) {
@@ -79,15 +79,15 @@ function getSelfAndDescendantIds(id, tasks, resultList = []) {
     return resultList;
   }
 
-  for (const child of children) {
+  children.forEach((child) => {
     getSelfAndDescendantIds(child.id, tasks, resultList);
-  }
+  });
 
   return resultList;
 }
 
 // Reducer function
-export function tasksReducer(state = initialState, action) {
+export default function tasksReducer(state = initialState, action) {
   switch (action.type) {
     case ACTION_TYPES.CREATE_TASK: {
       return state.concat({ ...action.payload, isCompleted: false });
@@ -101,11 +101,10 @@ export function tasksReducer(state = initialState, action) {
       const newTasks = state;
       const descendantIds = getSelfAndDescendantIds(action.payload.id, newTasks);
 
-      for (const id of descendantIds) {
+      descendantIds.forEach((id) => {
         newTasks.find(task => task.id === id).isCompleted = true;
-      }
-
-      return [ ...newTasks ];
+      });
+      return [...newTasks];
     }
 
     case ACTION_TYPES.UNCOMPLETE_TASK: {

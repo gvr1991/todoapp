@@ -1,6 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class TodoListInput extends React.Component {
+  static propTypes = {
+    onEnter: PropTypes.func.isRequired,
+    urlParams: PropTypes.symbol.isRequired,
+    placeholder: PropTypes.string.isRequired,
+  };
+
   constructor(props) {
     super(props);
 
@@ -36,14 +43,15 @@ class TodoListInput extends React.Component {
       <input
         style={
           {
-            marginLeft: "10px"
+            marginLeft: '10px',
           }
         }
         type="text"
         onChange={this.handleChange}
         onKeyPress={this.handleKeyPress}
         placeholder={placeholder}
-        value={value} />
+        value={value}
+      />
     );
   }
 }

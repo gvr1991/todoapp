@@ -5,25 +5,24 @@ import ListsPage from './list/ListsPage';
 import TasksPage from './task/TasksPage';
 import ConnectedNotifications from './Notifications';
 
-class TodoApp extends React.Component {
-  render() {
-    return (
-      <div>
-        <Router>
-          <ConnectedNotifications />
-          <Route
-            path="/projects"
-            component={ () => <ProjectsPage /> } />
-          <Route
-            path="/project/:projectId/lists"
-            component={ () => <ListsPage /> } />
-          <Route
-            path="/project/:projectId/list/:listId/tasks"
-            component={ () => <TasksPage /> } />
-        </Router>
-      </div>
-    );
-  }
-}
+const TodoApp = () => (
+  <div>
+    <Router>
+      <ConnectedNotifications />
+      <Route
+        path="/projects"
+        component={() => <ProjectsPage />}
+      />
+      <Route
+        path="/project/:projectId/lists"
+        component={() => <ListsPage />}
+      />
+      <Route
+        path="/project/:projectId/list/:listId/tasks"
+        component={() => <TasksPage />}
+      />
+    </Router>
+  </div>
+);
 
 export default TodoApp;

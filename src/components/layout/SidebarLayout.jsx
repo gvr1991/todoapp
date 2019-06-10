@@ -1,16 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import '../../styles/styles.css';
 
-class SidebarLayout extends React.Component {
-  render() {
-    const { children } = this.props;
+export default function SidebarLayout(props) {
+  const { children } = props;
 
-    return (
-      <div id="left-sidebar">
-        { children }
-      </div>
-    );
-  }
+  return (
+    <div id="left-sidebar">
+      { children }
+    </div>
+  );
 }
 
-export default SidebarLayout;
+SidebarLayout.propTypes = {
+  children: PropTypes.instanceOf.isRequired,
+};

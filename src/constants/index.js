@@ -1,2 +1,4 @@
 
-export const LIST_ROOT = 'root';
+const LIST_ROOT = 'root';
+
+export default LIST_ROOT;

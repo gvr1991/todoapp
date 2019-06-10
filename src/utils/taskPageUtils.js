@@ -1,4 +1,4 @@
-import * as CONSTANTS from '../constants/index';
+import LIST_ROOT from '../constants/index';
 
 function compareByPos(taskA, taskB) {
   if (taskA.position < taskB.position) {
@@ -19,10 +19,10 @@ export function orderTasks(parentId, tasks, resultList = []) {
 
   theseTasks.sort(compareByPos);
 
-  for (const task of theseTasks) {
+  theseTasks.forEach((task) => {
     resultList.push(task);
     orderTasks(task.id, tasks, resultList);
-  }
+  });
 
   return resultList;
 }
@@ -53,11 +53,11 @@ export function getGrandParentId(thisTask, orderedTasks) {
   const parent = orderedTasks.find(task => task.id === thisTask.parentId);
 
   if (!parent) {
-    return CONSTANTS.LIST_ROOT;
+    return LIST_ROOT;
   }
 
-  if (parent.parentId === CONSTANTS.LIST_ROOT) {
-    return CONSTANTS.LIST_ROOT;
+  if (parent.parentId === LIST_ROOT) {
+    return LIST_ROOT;
   }
 
   return orderedTasks.find(task => task.id === parent.parentId).id;

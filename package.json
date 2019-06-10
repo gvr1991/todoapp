@@ -4,11 +4,15 @@
   "private": true,
   "dependencies": {
     "react": "^16.8.6",
+    "redux": "^4.0.1",
     "react-dom": "^16.8.6",
+    "react-redux": "^7.0.3",
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",
     "react-scripts": "3.0.1",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "prop-types": "^15.7.2",
+    "uuid": "^3.3.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -32,7 +36,12 @@
     ]
   },
   "devDependencies": {
-    "react-redux": "^7.0.3",
-    "redux": "^4.0.1"
+    "babel-eslint": "^10.0.1",
+    "eslint": "5.16.0",
+    "eslint-config-airbnb": "17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.11.0",
+    "uuid": "^3.3.2"
   }
 }

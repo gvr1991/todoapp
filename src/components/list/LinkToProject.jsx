@@ -1,20 +1,21 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-class LinkToProject extends React.Component {
-  render() {
-    const { project } = this.props;
+export default function LinkToProject(props) {
+  const { project } = props;
 
-    return (
-      <React.Fragment>
-        <br />
-        <Link to={`/project/${project.id}/lists`} >
-          {project.title}
-        </Link>
-        <br />
-      </React.Fragment>
-    );
-  }
+  return (
+    <React.Fragment>
+      <br />
+      <Link to={`/project/${project.id}/lists`}>
+        {project.title}
+      </Link>
+      <br />
+    </React.Fragment>
+  );
 }
 
-export default LinkToProject;
+LinkToProject.propTypes = {
+  project: PropTypes.instanceOf.isRequired,
+};

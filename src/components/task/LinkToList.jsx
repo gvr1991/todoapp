@@ -1,20 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-class LinkToList extends React.Component {
-  render() {
-    const { list } = this.props;
+export default function LinkToList(props) {
+  const { list } = props;
 
-    return (
-      <React.Fragment>
-        <br />
-        <Link to={`/project/${list.projectId}/list/${list.id}/tasks`} >
-          {list.title}
-        </Link>
-        <br />
-      </React.Fragment>
-    );
-  }
+  return (
+    <React.Fragment>
+      <br />
+      <Link to={`/project/${list.projectId}/list/${list.id}/tasks`}>
+        {list.title}
+      </Link>
+      <br />
+    </React.Fragment>
+  );
 }
 
-export default LinkToList;
+LinkToList.propTypes = {
+  list: PropTypes.node.isRequired,
+};

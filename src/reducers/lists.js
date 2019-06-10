@@ -2,23 +2,23 @@ import * as ACTION_TYPES from '../constants/action-types';
 
 const initialState = [
   {
-    id: "1",
-    title: "List 1",
-    projectId: "1"
+    id: '1',
+    title: 'List 1',
+    projectId: '1',
   },
   {
-    id: "2",
-    title: "List 2",
-    projectId: "1"
+    id: '2',
+    title: 'List 2',
+    projectId: '1',
   },
   {
-    id: "3",
-    title: "List 3",
-    projectId: "1"
+    id: '3',
+    title: 'List 3',
+    projectId: '1',
   },
 ];
 
-export function listsReducer(state = initialState, action) {
+export default function listsReducer(state = initialState, action) {
   switch (action.type) {
     case ACTION_TYPES.CREATE_LIST: {
       return state.concat(action.payload);

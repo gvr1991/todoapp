@@ -1,27 +1,31 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import BreadCrumbsLayout from '../layout/BreadCrumbsLayout';
 import LinkLayout from '../layout/LinkLayout';
 
-class TaskBreadCrumbs extends React.Component {
-  render() {
-    const { list, project } = this.props;
+export default function TaskBreadCrumbs(props) {
+  const { list, project } = props;
 
-    return (
-      <BreadCrumbsLayout>
-        <LinkLayout
-          linkTo={`/projects`}
-          linkText={"Projects"} />
-        >
-        <LinkLayout
-          linkTo={`/project/${project.id}/lists`}
-          linkText={project.title} />
-        >
-        <hr />
-        { list.title }
-        <hr />
-      </BreadCrumbsLayout>
-    );
-  }
+  return (
+    <BreadCrumbsLayout>
+      <LinkLayout
+        linkTo="/projects"
+        linkText="Projects"
+      />
+      &gt;
+      <LinkLayout
+        linkTo={`/project/${project.id}/lists`}
+        linkText={project.title}
+      />
+      &gt;
+      <hr />
+      { list.title }
+      <hr />
+    </BreadCrumbsLayout>
+  );
 }
 
-export default TaskBreadCrumbs;
+TaskBreadCrumbs.propTypes = {
+  list: PropTypes.element.isRequired,
+  project: PropTypes.element.isRequired,
+};
