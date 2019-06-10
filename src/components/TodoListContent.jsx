@@ -23,8 +23,12 @@ export default function TodoListContent(props) {
 }
 
 TodoListContent.propTypes = {
-  breadCrumbs: PropTypes.node.isRequired,
+  breadCrumbs: PropTypes.node,
   title: PropTypes.node.isRequired,
   input: PropTypes.node.isRequired,
   collection: PropTypes.node.isRequired,
+};
+
+TodoListContent.defaultProps = {
+  breadCrumbs: '',
 };

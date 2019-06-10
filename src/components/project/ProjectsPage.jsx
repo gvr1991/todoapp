@@ -23,8 +23,8 @@ const mapDispatchToProps = dispatch => ({
 
 class ConnectedProjects extends React.Component {
   static propTypes = {
-    projects: PropTypes.node.isRequired,
-    match: PropTypes.symbol.isRequired,
+    projects: PropTypes.arrayOf(PropTypes.shape).isRequired,
+    match: PropTypes.shape.isRequired,
     sendCreate: PropTypes.func.isRequired,
     sendDelete: PropTypes.func.isRequired,
     sendNotification: PropTypes.func.isRequired,

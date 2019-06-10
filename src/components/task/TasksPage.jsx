@@ -46,10 +46,10 @@ const mapDispatchToProps = dispatch => ({
 
 class ConnectedTasks extends React.Component {
   static propTypes = {
-    lists: PropTypes.node.isRequired,
-    tasks: PropTypes.node.isRequired,
-    projects: PropTypes.node.isRequired,
-    match: PropTypes.symbol.isRequired,
+    lists: PropTypes.arrayOf(PropTypes.shape).isRequired,
+    tasks: PropTypes.arrayOf(PropTypes.shape).isRequired,
+    projects: PropTypes.arrayOf(PropTypes.shape).isRequired,
+    match: PropTypes.shape.isRequired,
 
     sendCreate: PropTypes.func.isRequired,
     sendUpdate: PropTypes.func.isRequired,

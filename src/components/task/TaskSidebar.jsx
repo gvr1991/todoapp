@@ -34,8 +34,8 @@ const ThisSidebar = function ThisSidebar(props) {
 
 ThisSidebar.propTypes = {
   title: PropTypes.string.isRequired,
-  urlParams: PropTypes.symbol.isRequired,
-  lists: PropTypes.element.isRequired,
+  urlParams: PropTypes.shape.isRequired,
+  lists: PropTypes.arrayOf(PropTypes.shape).isRequired,
 };
 
 const TaskSidebar = connect(mapStateToProps)(ThisSidebar);

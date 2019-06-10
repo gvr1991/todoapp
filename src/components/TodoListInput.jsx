@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 class TodoListInput extends React.Component {
   static propTypes = {
     onEnter: PropTypes.func.isRequired,
-    urlParams: PropTypes.symbol.isRequired,
+    urlParams: PropTypes.shape.isRequired,
     placeholder: PropTypes.string.isRequired,
   };
 
